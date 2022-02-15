@@ -1,24 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
-import LoginScreen from './components/Login';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-class App extends Component {
+import HomeScreen from './components/home';
+import LoginScreen from './components/login';
+import SignupScreen from './components/signup';
 
-  constructor(props){
-    super(props);
-  }
+const Stack = createNativeStackNavigator();
 
-  render(){
-    return (
-      <View>
-      
-      </View>
-        
-        
-    );
-  }
-  
+class App extends Component{
+    render(){
+        return (
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen name="Login" component={LoginScreen} />
+                    <Stack.Screen name="Signup" component={SignupScreen} />
+                    <Stack.Screen name="Home" component={HomeScreen} />                                     
+                </Stack.Navigator>
+                
+            </NavigationContainer>
+        );
+    }
 }
 
 export default App;
