@@ -7,9 +7,10 @@ class LoginScreen extends Component{
     constructor(props){
         super(props);
 
+        //TODO: Remove hardcoded account
         this.state = {
-            email: "",
-            password: ""
+            email: "email@email.com",
+            password: "password"
         }
     }
 
@@ -36,6 +37,8 @@ class LoginScreen extends Component{
         .then(async (responseJson) => {
                 console.log(responseJson);
                 await AsyncStorage.setItem('@session_token', responseJson.token);
+                await AsyncStorage.setItem('@id', responseJson.id)
+            
                 this.props.navigation.navigate("Home");
         })
         .catch((error) => {

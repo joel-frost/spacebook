@@ -6,6 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ProfileScreen from './profile';
 import SearchScreen from './search';
 import FriendRequestsScreen from './friendrequests';
+import LogoutScreen from './logout';
 
 const Tab = createBottomTabNavigator();
 
@@ -80,12 +81,17 @@ class HomeScreen extends Component {
       );
     } else {
       return (
+
           <Tab.Navigator
             screenOptions={({ route }) => ({
               tabBarIcon: ({ focused, color, size }) => {
                 let iconName;
-
-                if (route.name === 'Profile') {
+                
+                if (route.name === 'Overview') {
+                  iconName = focused
+                    ? 'home'
+                    : 'home-outline';
+                } else if (route.name === 'Profile') {
                   iconName = focused
                     ? 'person'
                     : 'person-outline';
@@ -97,7 +103,11 @@ class HomeScreen extends Component {
                   iconName = focused
                     ? 'person-add'
                     : 'person-add-outline';
-                }
+                } else if (route.name == 'Logout') {
+                  iconName = focused
+                    ? 'log-out'
+                    : 'log-out-outline';
+                } 
                 
 
                 // You can return any component that you like here!
@@ -111,6 +121,7 @@ class HomeScreen extends Component {
             <Tab.Screen name="Profile" component={ProfileScreen} />
             <Tab.Screen name="Search" component={SearchScreen} />
             <Tab.Screen name="Friend Requests" component={FriendRequestsScreen} />
+            <Tab.Screen name="Logout" component={LogoutScreen} />
           </Tab.Navigator>
       );
     }

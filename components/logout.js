@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Text, ScrollView, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-class HomeScreen extends Component{
+class LogoutScreen extends Component{
     constructor(props){
         super(props);
 
@@ -57,20 +57,13 @@ class HomeScreen extends Component{
     render(){
         return (
             <ScrollView>
-                <Text style={{fontSize:18, fontWeight:'bold', padding:5, margin:5}}>If you leave me now, you'll take away the biggest part of me...</Text>
-                <Text style={{fontSize:18, fontWeight:'bold', padding:5, margin:5}}>...Oooooohh, baby please don't go!</Text>
                 <Button
-                    title="I'm outta here"
+                    title="Logout"
                     onPress={() => this.logout()}
-                />
-                <Button
-                    title="OK, take me home, country roads"
-                    color="darkblue"
-                    onPress={() => this.props.navigation.navigate("Home")}
                 />
             </ScrollView>
         )
     }
 }
 
-export default HomeScreen;
+export default LogoutScreen;
