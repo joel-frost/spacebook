@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { Button } from 'react-native';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { Component } from "react";
+import { Button } from "react-native";
+import { ScrollView, TextInput } from "react-native-gesture-handler";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -9,41 +9,42 @@ class LoginScreen extends Component {
 
     // TODO: Remove hardcoded account
     this.state = {
-      email: 'email@email.com',
-      password: 'password',
+      email: "email@email.com",
+      password: "password",
     };
   }
 
-  login = async () =>
+  login = async () => {
+    // Validation here...
 
-  // Validation here...
-
-    fetch('http://localhost:3333/api/1.0.0/login', {
-      method: 'post',
+    fetch("http://localhost:3333/api/1.0.0/login", {
+      method: "post",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify(this.state),
     })
       .then((response) => {
         if (response.status === 200) {
           return response.json();
-        } if (response.status === 400) {
-          throw 'Invalid email or password';
+        }
+        if (response.status === 400) {
+          throw "Invalid email or password";
         } else {
-          throw 'Something went wrong';
+          throw "Something went wrong";
         }
       })
       .then(async (responseJson) => {
         console.log(responseJson);
-        await AsyncStorage.setItem('@session_token', responseJson.token);
-        await AsyncStorage.setItem('@id', responseJson.id);
+        await AsyncStorage.setItem("@session_token", responseJson.token);
+        await AsyncStorage.setItem("@id", responseJson.id);
 
-        this.props.navigation.navigate('Home');
+        this.props.navigation.navigate("Home");
       })
       .catch((error) => {
         console.log(error);
       });
+  };
 
   render() {
     return (
@@ -61,14 +62,11 @@ class LoginScreen extends Component {
           secureTextEntry
           style={{ padding: 5, borderWidth: 1, margin: 5 }}
         />
-        <Button
-          title="Login"
-          onPress={() => this.login()}
-        />
+        <Button title="Login" onPress={() => this.login()} />
         <Button
           title="Don't have an account?"
           color="darkblue"
-          onPress={() => this.props.navigation.navigate('Signup')}
+          onPress={() => this.props.navigation.navigate("Signup")}
         />
       </ScrollView>
     );

@@ -118,7 +118,7 @@ class ProfileScreen extends Component {
     const token = await AsyncStorage.getItem("@session_token");
     const id = await AsyncStorage.getItem("@id");
     console.log(
-      "URL: " + `http://localhost:3333/api/1.0.0/user/${id}/${postID}`
+      "URL: " + `http://localhost:3333/api/1.0.0/user/${id}/post/${postID}`
     );
     return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post/${postID}`, {
       method: "delete",
@@ -128,7 +128,8 @@ class ProfileScreen extends Component {
       },
     })
       .then((response) => {
-        if (response.status === 201) {
+        console.log(response);
+        if (response.status === 200) {
           this.getPosts();
           console.log("Post Deleted");
         } else if (response.status === 400) {
