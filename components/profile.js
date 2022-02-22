@@ -128,8 +128,14 @@ class ProfileScreen extends Component {
       },
     })
       .then((response) => {
-        this.getPosts();
-        console.log("Post Deleted");
+        if (response.status === 201) {
+          this.getPosts();
+          console.log("Post Deleted");
+        } else if (response.status === 400) {
+          throw "Unable to delete post";
+        } else {
+          throw "Something went wrong";
+        }
       })
       .catch((e) => {
         console.log(e);
