@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { SearchBar, Button } from "react-native-elements";
+import { SearchBar, Button, Card, Text } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, ActivityIndicator, Text, StyleSheet } from "react-native";
+import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { ScrollView, FlatList } from "react-native-gesture-handler";
 
 class SearchScreen extends Component {
   constructor(props) {
@@ -47,6 +48,31 @@ class SearchScreen extends Component {
       });
   };
 
+  addFriend = async (userID) => {
+    const token = await AsyncStorage.getItem("@session_token");
+
+    return fetch(`http://localhost:3333/api/1.0.0/user/${userID}/friends`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Authorization": token,
+      },
+    })
+      .then((response) => {
+        console.log(response);
+        if (response.status === 201) {
+          return response;
+        } else if (response.status === 400) {
+          throw "Unable to add friend";
+        } else {
+          throw "Something went wrong";
+        }
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -55,17 +81,47 @@ class SearchScreen extends Component {
         </View>
       );
     }
+
+    //<Button title="View Profile" onPress={() => this.props.navigation.navigate("Profile", {item})}/>
     return (
-      <View>
-        <SearchBar
-          placeholder="Enter Name"
-          onChangeText={(searchTerm) => this.setState({ searchTerm })}
-          value={this.state.searchTerm}
-        />
-        <Button title="Search" onPress={() => this.updateSearch()} />
-      </View>
+      <ScrollView>
+        <View>
+          <SearchBar
+            placeholder="Enter Name"
+            onChangeText={(searchTerm) => this.setState({ searchTerm })}
+            value={this.state.searchTerm}
+          />
+          <Button title="Search" onPress={() => this.updateSearch()} />
+          <FlatList
+            data={this.state.listData}
+            renderItem={({ item, index }) => (
+              <View>
+                <Card>
+                  <Card.Title>
+                    {item.user_givenname} {item.user_familyname}
+                  </Card.Title>
+                  <Card.Divider />
+                  <Button
+                    title="Add Friend"
+                    onPress={() => this.addFriend(item.user_id)}
+                  />
+
+                  <Card.Divider style={styles.divider} />
+                </Card>
+              </View>
+            )}
+            keyExtractor={(item, index) => item.user_id.toString()}
+          />
+        </View>
+      </ScrollView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  divider: {
+    marginTop: 10,
+  },
+});
 
 export default SearchScreen;

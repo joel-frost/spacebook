@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ProfileScreen from './profile';
-import SearchScreen from './search';
+import SearchNavigator from './searchNavigator';
 import FriendRequestsScreen from './friendrequests';
 import LogoutScreen from './logout';
 
@@ -55,7 +55,7 @@ class HomeScreen extends Component {
         })}
       >
         <Tab.Screen name="Profile" component={ProfileScreen} />
-        <Tab.Screen name="Search" component={SearchScreen} />
+        <Tab.Screen name="Search" component={SearchNavigator} />
         <Tab.Screen name="Friend Requests" component={FriendRequestsScreen} />
         <Tab.Screen name="Logout" component={LogoutScreen} />
       </Tab.Navigator>

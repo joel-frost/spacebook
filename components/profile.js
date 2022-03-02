@@ -16,17 +16,30 @@ class ProfileScreen extends Component {
       first_name: "",
       last_name: "",
       email: "",
+      id: "",
     };
   }
 
   componentDidMount() {
+    try {
+      this.state.id = this.props.route.params.item.user_id;
+    } catch (e) {
+      this.state.id = "";
+    }
+
     this.getUser();
     this.getPosts();
   }
 
   getUser = async () => {
     const token = await AsyncStorage.getItem("@session_token");
-    const id = await AsyncStorage.getItem("@id");
+    let id;
+    if (this.state.id === "") {
+      console.log("getting id from async");
+      id = await AsyncStorage.getItem("@id");
+    } else {
+      id = this.state.id;
+    }
 
     return fetch(`http://localhost:3333/api/1.0.0/user/${id}/`, {
       method: "get",
@@ -57,7 +70,13 @@ class ProfileScreen extends Component {
 
   getPosts = async () => {
     const token = await AsyncStorage.getItem("@session_token");
-    const id = await AsyncStorage.getItem("@id");
+    let id;
+    if (this.state.id === "") {
+      console.log("getting id from async");
+      id = await AsyncStorage.getItem("@id");
+    } else {
+      id = this.state.id;
+    }
 
     return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post`, {
       method: "get",
@@ -72,6 +91,9 @@ class ProfileScreen extends Component {
         }
         if (response.status === 400) {
           throw "Unable to get posts";
+        }
+        if (response.status === 403) {
+          return;
         } else {
           throw "Something went wrong";
         }
