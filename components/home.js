@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import ProfileScreen from './profile';
 import SearchNavigator from './searchNavigator';
-import FriendRequestsScreen from './friendrequests';
+import FriendsNavigator from './friendsNavigator';
 import LogoutScreen from './logout';
 
 const Tab = createBottomTabNavigator();
@@ -40,7 +40,7 @@ class HomeScreen extends Component {
               iconName = focused ? 'person' : 'person-outline';
             } else if (route.name === 'Search') {
               iconName = focused ? 'search' : 'search-outline';
-            } else if (route.name === 'Friend Requests') {
+            } else if (route.name === 'Friends') {
               iconName = focused ? 'person-add' : 'person-add-outline';
             } else if (route.name === 'Logout') {
               iconName = focused ? 'log-out' : 'log-out-outline';
@@ -56,7 +56,7 @@ class HomeScreen extends Component {
       >
         <Tab.Screen name="Profile" component={ProfileScreen} />
         <Tab.Screen name="Search" component={SearchNavigator} />
-        <Tab.Screen name="Friend Requests" component={FriendRequestsScreen} />
+        <Tab.Screen name="Friends" component={FriendsNavigator} />
         <Tab.Screen name="Logout" component={LogoutScreen} />
       </Tab.Navigator>
     );
