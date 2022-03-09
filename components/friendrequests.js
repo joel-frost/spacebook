@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { View, ActivityIndicator, ScrollView, FlatList } from "react-native";
+import {
+  View,
+  ActivityIndicator,
+  ScrollView,
+  FlatList,
+} from "react-native";
 import { Button, Text, Card } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -46,6 +51,42 @@ class FriendRequestsScreen extends Component {
       });
   };
 
+  acceptFriendRequest = async (id) => {
+    const token = await AsyncStorage.getItem("@session_token");
+
+    return fetch(`http://localhost:3333/api/1.0.0/friendrequests/${id}`, {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Authorization": token,
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw "Something went wrong";
+      }
+    });
+  };
+
+  rejectFriendRequest = async (id) => {
+    const token = await AsyncStorage.getItem("@session_token");
+
+    return fetch(`http://localhost:3333/api/1.0.0/friendrequests/${id}`, {
+      method: "delete",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Authorization": token,
+      },
+    }).then((response) => {
+      if (response.status === 200) {
+        return response.json();
+      } else {
+        throw "Something went wrong";
+      }
+    });
+  };
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -74,6 +115,14 @@ class FriendRequestsScreen extends Component {
                 </Card.Title>
 
                 <Card.Divider />
+                <Button
+                  title="Accept"
+                  onPress={() => this.acceptFriendRequest(item.user_id)}
+                />
+                <Button
+                  title="Reject"
+                  onPress={() => this.rejectFriendRequest(item.user_id)}
+                />
                 <Text>Accept / Reject Here</Text>
               </Card>
             </View>

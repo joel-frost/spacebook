@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, ActivityIndicator, ScrollView } from "react-native";
+import { View, ActivityIndicator, ScrollView, FlatList } from "react-native";
 import { Button, Text, Card } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -82,10 +82,10 @@ class FriendsListScreen extends Component {
           renderItem={({ item, index }) => (
             <View>
               <Card>
-                <Card.Title>Friend</Card.Title>
+                <Card.Title>{item.user_givenname} {item.user_familyname}</Card.Title>
 
                 <Card.Divider />
-                <Text>More text</Text>
+                <Button title="View Profile" onPress={() => this.props.navigation.navigate("Profile", {item})}/>
               </Card>
             </View>
           )}
