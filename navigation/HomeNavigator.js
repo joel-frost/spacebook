@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import UserProfileScreen from './userProfile';
-import SearchNavigator from './searchNavigator';
-import FriendsNavigator from './friendsNavigator';
-import LogoutScreen from './logout';
+import UserProfileScreen from '../components/UserProfile';
+import SearchNavigator from './SearchNavigator';
+import FriendsNavigator from './FriendsNavigator';
+import LogoutScreen from '../components/Logout';
 
 const Tab = createBottomTabNavigator();
 
-class HomeScreen extends Component {
+class HomeNavigator extends Component {
   componentDidMount() {
     this.unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();
@@ -63,4 +63,4 @@ class HomeScreen extends Component {
   }
 }
 
-export default HomeScreen;
+export default HomeNavigator;

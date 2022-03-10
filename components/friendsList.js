@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { View, ActivityIndicator, ScrollView, FlatList } from "react-native";
 import { Button, Text, Card } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getFriendsList } from "../api/SpacebookService";
 
 class FriendsListScreen extends Component {
   constructor(props) {
@@ -10,41 +11,34 @@ class FriendsListScreen extends Component {
     this.state = {
       isLoading: true,
       listData: [],
+      token: "",
+      id: "",
     };
   }
 
-  componentDidMount() {
+  componentDidMount = async() => {
+    await this.retrieveFromAsync();
     this.getFriendsList();
   }
 
-  getFriendsList = async () => {
+  retrieveFromAsync = async () => {
     const token = await AsyncStorage.getItem("@session_token");
     const id = await AsyncStorage.getItem("@id");
 
-    return fetch(`http://localhost:3333/api/1.0.0/user/${id}/friends`, {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Authorization": token,
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        }
-        if (response.status === 400) {
-          throw "Unable to get posts";
-        } else {
-          throw "Something went wrong";
-        }
-      })
-      .then(async (responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          isLoading: false,
-          listData: responseJson,
-        });
+    this.setState({
+      token: token,
+      id: id,
+    });
+  }
+
+  getFriendsList = async () => {
+    getFriendsList(this.state.token, this.state.id).then(async (responseJson) => {
+      console.log(responseJson);
+      this.setState({
+        isLoading: false,
+        listData: responseJson,
       });
+    });
   };
 
   render() {

@@ -3,6 +3,7 @@ import { SearchBar, Button, Card, Text } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { View, ActivityIndicator, StyleSheet } from "react-native";
 import { ScrollView, FlatList } from "react-native-gesture-handler";
+import { updateSearch, addFriend } from "../api/SpacebookService";
 
 class SearchScreen extends Component {
   constructor(props) {
@@ -11,66 +12,38 @@ class SearchScreen extends Component {
       isLoading: false,
       searchTerm: "",
       listData: [],
+      token: "",
     };
   }
+
+  componentDidMount = async() => {
+    await this.retrieveFromAsync();
+  }
+
+  retrieveFromAsync = async () => {
+    const token = await AsyncStorage.getItem("@session_token");
+
+    this.setState({
+      token: token,
+    });
+  };
 
   updateSearch = async () => {
     this.setState.isLoading = true;
     console.log(this.state.searchTerm);
-    const token = await AsyncStorage.getItem("@session_token");
-
-    return fetch(
-      `http://localhost:3333/api/1.0.0/search?q=${this.state.searchTerm}`,
-      {
-        method: "get",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Authorization": token,
-        },
-      }
-    )
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        }
-        if (response.status === 400) {
-          throw "Unable to search users";
-        } else {
-          throw "Something went wrong";
-        }
-      })
-      .then(async (responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          isLoading: false,
-          listData: responseJson,
-        });
+    updateSearch(this.state.token, this.state.searchTerm)
+    .then(async (responseJson) => {
+      console.log(responseJson);
+      this.setState({
+        isLoading: false,
+        listData: responseJson,
       });
+    });
+      
   };
 
   addFriend = async (userID) => {
-    const token = await AsyncStorage.getItem("@session_token");
-
-    return fetch(`http://localhost:3333/api/1.0.0/user/${userID}/friends`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Authorization": token,
-      },
-    })
-      .then((response) => {
-        console.log(response);
-        if (response.status === 201) {
-          return response;
-        } else if (response.status === 400) {
-          throw "Unable to add friend";
-        } else {
-          throw "Something went wrong";
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    addFriend(this.state.token, userID);
   };
 
   render() {

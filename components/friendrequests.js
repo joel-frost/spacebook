@@ -1,12 +1,8 @@
 import React, { Component } from "react";
-import {
-  View,
-  ActivityIndicator,
-  ScrollView,
-  FlatList,
-} from "react-native";
+import { View, ActivityIndicator, ScrollView, FlatList } from "react-native";
 import { Button, Text, Card } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getFriendRequests, acceptFriendRequest, rejectFriendRequest } from "../api/SpacebookService";
 
 class FriendRequestsScreen extends Component {
   constructor(props) {
@@ -15,76 +11,42 @@ class FriendRequestsScreen extends Component {
     this.state = {
       isLoading: true,
       listData: [],
+      token: "",
+      id: "",
     };
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    await this.retrieveFromAsync();
     this.getFriendRequests();
-  }
+  };
+
+  retrieveFromAsync = async () => {
+    const token = await AsyncStorage.getItem("@session_token");
+    const id = await AsyncStorage.getItem("@id");
+
+    this.setState({
+      token: token,
+      id: id,
+    });
+  };
 
   getFriendRequests = async () => {
-    const token = await AsyncStorage.getItem("@session_token");
-
-    return fetch(`http://localhost:3333/api/1.0.0/friendrequests`, {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Authorization": token,
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        }
-        if (response.status === 400) {
-          throw "Unable to get posts";
-        } else {
-          throw "Something went wrong";
-        }
-      })
-      .then(async (responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          isLoading: false,
-          listData: responseJson,
-        });
+    getFriendRequests(this.state.token).then((response) => {
+      console.log(response);
+      this.setState({
+        isLoading: false,
+        listData: response,
       });
+    });
   };
 
   acceptFriendRequest = async (id) => {
-    const token = await AsyncStorage.getItem("@session_token");
-
-    return fetch(`http://localhost:3333/api/1.0.0/friendrequests/${id}`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Authorization": token,
-      },
-    }).then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        throw "Something went wrong";
-      }
-    });
+    acceptFriendRequest(this.state.token, id);
   };
 
   rejectFriendRequest = async (id) => {
-    const token = await AsyncStorage.getItem("@session_token");
-
-    return fetch(`http://localhost:3333/api/1.0.0/friendrequests/${id}`, {
-      method: "delete",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Authorization": token,
-      },
-    }).then((response) => {
-      if (response.status === 200) {
-        return response.json();
-      } else {
-        throw "Something went wrong";
-      }
-    });
+    rejectFriendRequest(this.state.token, id);
   };
 
   render() {

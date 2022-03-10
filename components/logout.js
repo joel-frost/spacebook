@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, ScrollView, Button } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { logout } from '../api/SpacebookService';
 
 class LogoutScreen extends Component {
   constructor(props) {
@@ -31,14 +32,7 @@ class LogoutScreen extends Component {
   };
 
   logout = async () => {
-    const token = await AsyncStorage.getItem('@session_token');
-    await AsyncStorage.removeItem('@session_token');
-    return fetch('http://localhost:3333/api/1.0.0/logout', {
-      method: 'post',
-      headers: {
-        'X-Authorization': token,
-      },
-    })
+    logout()
       .then((response) => {
         if (response.status === 200) {
           this.props.navigation.navigate('Login');

@@ -4,6 +4,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FlatList } from "react-native-gesture-handler";
 import { Text, Card, Input, Button, Avatar } from "react-native-elements";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import {
+  getUser,
+  getPosts,
+  submitPost,
+  deletePost,
+} from "../api/SpacebookService";
 
 //TODO: Edit Post, Edit Profile, Add Photo
 class UserProfileScreen extends Component {
@@ -17,88 +23,50 @@ class UserProfileScreen extends Component {
       first_name: "",
       last_name: "",
       email: "",
+      token: "",
+      id: "",
     };
   }
 
-  componentDidMount() {
+  componentDidMount = async() => {
+    await this.retrieveFromAsync();
     this.getUser();
     this.getPosts();
   }
 
-  getUser = async () => {
+  retrieveFromAsync = async () => {
     const token = await AsyncStorage.getItem("@session_token");
     const id = await AsyncStorage.getItem("@id");
 
-    return fetch(`http://localhost:3333/api/1.0.0/user/${id}/`, {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Authorization": token,
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        }
-        if (response.status === 400) {
-          throw "Unable to get posts";
-        } else {
-          throw "Something went wrong";
-        }
-      })
-      .then(async (responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          first_name: responseJson.first_name,
-          last_name: responseJson.last_name,
-          email: responseJson.email,
-        });
+    this.setState({
+      token: token,
+      id: id,
+    });
+  };
+
+  getUser = async () => {
+    getUser(this.state.token, this.state.id).then(async (responseJson) => {
+      console.log(responseJson);
+      this.setState({
+        first_name: responseJson.first_name,
+        last_name: responseJson.last_name,
+        email: responseJson.email,
       });
+    });
   };
 
   getPosts = async () => {
-    const token = await AsyncStorage.getItem("@session_token");
-    const id = await AsyncStorage.getItem("@id");
-    return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post`, {
-      method: "get",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Authorization": token,
-      },
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          return response.json();
-        }
-        if (response.status === 400) {
-          throw "Unable to get posts";
-        }
-        if (response.status === 403) {
-          return;
-        } else {
-          throw "Something went wrong";
-        }
-      })
-      .then(async (responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          isLoading: false,
-          listData: responseJson,
-        });
+    getPosts(this.state.token, this.state.id).then(async (responseJson) => {
+      console.log(responseJson);
+      this.setState({
+        isLoading: false,
+        listData: responseJson,
       });
+    });
   };
 
   submitPost = async () => {
-    const token = await AsyncStorage.getItem("@session_token");
-    const id = await AsyncStorage.getItem("@id");
-    return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post`, {
-      method: "post",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Authorization": token,
-      },
-      body: `{"text": "${this.state.text}"}`,
-    })
+    submitPost(this.state.token, this.state.id, this.state.text)
       .then((response) => {
         console.log(response);
         this.setState({
@@ -118,18 +86,7 @@ class UserProfileScreen extends Component {
   };
 
   deletePost = async (postID) => {
-    const token = await AsyncStorage.getItem("@session_token");
-    const id = await AsyncStorage.getItem("@id");
-    console.log(
-      "URL: " + `http://localhost:3333/api/1.0.0/user/${id}/post/${postID}`
-    );
-    return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post/${postID}`, {
-      method: "delete",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Authorization": token,
-      },
-    })
+    deletePost(this.state.token, this.state.id, postID)
       .then((response) => {
         console.log(response);
         if (response.status === 200) {
