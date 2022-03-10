@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, ActivityIndicator, ScrollView, StyleSheet } from "react-native";
+import { View, ActivityIndicator, ScrollView, StyleSheet, RefreshControl } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FlatList } from "react-native-gesture-handler";
 import { Text, Card, Input, Button, Avatar } from "react-native-elements";
@@ -28,10 +28,14 @@ class UserProfileScreen extends Component {
     };
   }
 
-  componentDidMount = async() => {
-    await this.retrieveFromAsync();
-    this.getUser();
-    this.getPosts();
+  componentDidMount = async () => {
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+      this.getData();
+    });
+  };
+
+  componentWillUnmount() {
+    this._unsubscribe();
   }
 
   retrieveFromAsync = async () => {
@@ -103,6 +107,13 @@ class UserProfileScreen extends Component {
       });
   };
 
+  getData = async () => {
+    await this.retrieveFromAsync();
+    this.getUser();
+    this.getPosts();
+  }
+
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -112,16 +123,27 @@ class UserProfileScreen extends Component {
       );
     }
     return (
-      <ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.isLoading}
+            onRefresh={() => this.onRefresh()}
+          />
+        }
+      >
         <View style={styles.container}>
           <Avatar
             size={128}
             rounded
             source={"https://randomuser.me/api/portraits/men/36.jpg"}
-          />
+          />        
           <Text style={styles.nametext}>
             {this.state.first_name} {this.state.last_name}
           </Text>
+          <Button
+            title="Edit Profile"
+            onPress={() => this.props.navigation.navigate("Edit Profile")}
+          />
           <Input
             placeholder="Type a post"
             multiline

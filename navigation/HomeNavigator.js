@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import UserProfileScreen from '../components/UserProfile';
+import UserProfileNavigator from './UserProfileNavigator';
 import SearchNavigator from './SearchNavigator';
 import FriendsNavigator from './FriendsNavigator';
 import LogoutScreen from '../components/Logout';
@@ -36,7 +36,7 @@ class HomeNavigator extends Component {
 
             if (route.name === 'Overview') {
               iconName = focused ? 'home' : 'home-outline';
-            } else if (route.name === 'Profile') {
+            } else if (route.name === 'My Profile') {
               iconName = focused ? 'person' : 'person-outline';
             } else if (route.name === 'Search') {
               iconName = focused ? 'search' : 'search-outline';
@@ -54,7 +54,7 @@ class HomeNavigator extends Component {
           headerShown: false,
         })}
       >
-        <Tab.Screen name="Profile" component={UserProfileScreen} />
+        <Tab.Screen name="My Profile" component={UserProfileNavigator} />
         <Tab.Screen name="Search" component={SearchNavigator} />
         <Tab.Screen name="Friends" component={FriendsNavigator} />
         <Tab.Screen name="Logout" component={LogoutScreen} />

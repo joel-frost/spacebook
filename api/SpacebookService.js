@@ -66,6 +66,29 @@ export const logout = async () => {
     })
 };
 
+export const editProfile = async (token, id, updatedInfo) => {
+  console.log(JSON.stringify(updatedInfo));
+  return fetch(`http://localhost:3333/api/1.0.0/user/${id}/`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Authorization": token,
+    },
+    body: JSON.stringify(updatedInfo)
+    
+  }).then((response) => {
+    if (response.status === 200) {
+      return response;
+    }
+    if (response.status === 400) {
+      throw "Unable to update";
+    } else {
+      throw "Something went wrong";
+    }
+  });
+  
+}
+
 export const getUser = async (token, id) => {
   console.log(token);
   console.log(id);
