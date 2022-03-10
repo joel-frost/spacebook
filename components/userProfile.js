@@ -5,7 +5,8 @@ import { FlatList } from "react-native-gesture-handler";
 import { Text, Card, Input, Button, Avatar } from "react-native-elements";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-class ProfileScreen extends Component {
+//TODO: Edit Post, Edit Profile, Add Photo
+class UserProfileScreen extends Component {
   constructor(props) {
     super(props);
 
@@ -16,25 +17,17 @@ class ProfileScreen extends Component {
       first_name: "",
       last_name: "",
       email: "",
-      id: "",
     };
   }
 
   componentDidMount() {
-    console.log(this.props.route.params.item.user_id);
-    try {
-      this.state.id = this.props.route.params.item.user_id;
-    } catch (e) {
-      throw "Unable to access profile";
-    }
-
     this.getUser();
     this.getPosts();
   }
 
   getUser = async () => {
     const token = await AsyncStorage.getItem("@session_token");
-    const id = this.state.id;
+    const id = await AsyncStorage.getItem("@id");
 
     return fetch(`http://localhost:3333/api/1.0.0/user/${id}/`, {
       method: "get",
@@ -65,8 +58,7 @@ class ProfileScreen extends Component {
 
   getPosts = async () => {
     const token = await AsyncStorage.getItem("@session_token");
-    const id = this.state.id;
-
+    const id = await AsyncStorage.getItem("@id");
     return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post`, {
       method: "get",
       headers: {
@@ -98,7 +90,7 @@ class ProfileScreen extends Component {
 
   submitPost = async () => {
     const token = await AsyncStorage.getItem("@session_token");
-    const id = this.state.id;
+    const id = await AsyncStorage.getItem("@id");
     return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post`, {
       method: "post",
       headers: {
@@ -127,7 +119,7 @@ class ProfileScreen extends Component {
 
   deletePost = async (postID) => {
     const token = await AsyncStorage.getItem("@session_token");
-    const id = this.state.id;
+    const id = await AsyncStorage.getItem("@id");
     console.log(
       "URL: " + `http://localhost:3333/api/1.0.0/user/${id}/post/${postID}`
     );
@@ -231,4 +223,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ProfileScreen;
+export default UserProfileScreen;
