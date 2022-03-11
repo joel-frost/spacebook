@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import { Card } from "react-native-elements";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, ActivityIndicator, StyleSheet, Button } from "react-native";
-import { ScrollView, FlatList, TextInput } from "react-native-gesture-handler";
-import { updateSearch, addFriend } from "../api/SpacebookService";
+import React, {Component} from 'react';
+import {Card} from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {View, ActivityIndicator, StyleSheet, Button} from 'react-native';
+import {ScrollView, FlatList, TextInput} from 'react-native-gesture-handler';
+import {updateSearch, addFriend} from '../api/SpacebookService';
 
 class SearchScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoading: false,
-      searchTerm: "",
+      searchTerm: '',
       listData: [],
-      token: "",
+      token: '',
     };
   }
 
@@ -21,7 +21,7 @@ class SearchScreen extends Component {
   };
 
   retrieveFromAsync = async () => {
-    const token = await AsyncStorage.getItem("@session_token");
+    const token = await AsyncStorage.getItem('@session_token');
 
     this.setState({
       token: token,
@@ -32,26 +32,26 @@ class SearchScreen extends Component {
     this.setState.isLoading = true;
     console.log(this.state.searchTerm);
     updateSearch(this.state.token, this.state.searchTerm).then(
-      async (responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          isLoading: false,
-          listData: responseJson,
-        });
-      }
+        async (responseJson) => {
+          console.log(responseJson);
+          this.setState({
+            isLoading: false,
+            listData: responseJson,
+          });
+        }
     );
   };
 
   addFriend = async (userID) => {
     addFriend(this.state.token, userID).then((response) => {
       if (response.status === 201) {
-        this.props.navigation.navigate("Message", {
-          message: "Friend Request Sent",
+        this.props.navigation.navigate('Message', {
+          message: 'Friend Request Sent',
         });
       } else {
-        this.props.navigation.navigate("Message", {
+        this.props.navigation.navigate('Message', {
           message:
-            "Unable to add friend, you may already have added this person.",
+            'Unable to add friend, you may already have added this person.',
         });
       }
     });
@@ -74,7 +74,7 @@ class SearchScreen extends Component {
             multiline
             numberOfLines={3}
             placeholder="Enter Name"
-            onChangeText={(searchTerm) => this.setState({ searchTerm })}
+            onChangeText={(searchTerm) => this.setState({searchTerm})}
             value={this.state.searchTerm}
           />
           <Button
@@ -86,7 +86,7 @@ class SearchScreen extends Component {
         <View>
           <FlatList
             data={this.state.listData}
-            renderItem={({ item, index }) => (
+            renderItem={({item, index}) => (
               <View>
                 <Card>
                   <Card.Title>
@@ -94,7 +94,7 @@ class SearchScreen extends Component {
                   </Card.Title>
                   <Card.Divider />
                   <Button
-                  color="salmon"
+                    color="salmon"
                     title="Add Friend"
                     onPress={() => this.addFriend(item.user_id)}
                   />
@@ -115,14 +115,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginTop: 20,
-    alignItems: "center",
+    alignItems: 'center',
   },
   divider: {
     marginTop: 10,
   },
   input: {
     marginBottom: 10,
-    borderBottomWidth : 1.0
+    borderBottomWidth: 1.0,
   },
 });
 

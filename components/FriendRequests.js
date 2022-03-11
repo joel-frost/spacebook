@@ -1,18 +1,18 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   View,
   ActivityIndicator,
   ScrollView,
   FlatList,
   Button,
-} from "react-native";
-import { Text, Card } from "react-native-elements";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+} from 'react-native';
+import {Text, Card} from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   getFriendRequests,
   acceptFriendRequest,
   rejectFriendRequest,
-} from "../api/SpacebookService";
+} from '../api/SpacebookService';
 
 class FriendRequestsScreen extends Component {
   constructor(props) {
@@ -21,8 +21,8 @@ class FriendRequestsScreen extends Component {
     this.state = {
       isLoading: true,
       listData: [],
-      token: "",
-      id: "",
+      token: '',
+      id: '',
     };
   }
 
@@ -32,8 +32,8 @@ class FriendRequestsScreen extends Component {
   };
 
   retrieveFromAsync = async () => {
-    const token = await AsyncStorage.getItem("@session_token");
-    const id = await AsyncStorage.getItem("@id");
+    const token = await AsyncStorage.getItem('@session_token');
+    const id = await AsyncStorage.getItem('@id');
 
     this.setState({
       token: token,
@@ -53,16 +53,16 @@ class FriendRequestsScreen extends Component {
 
   acceptFriendRequest = async (id) => {
     acceptFriendRequest(this.state.token, id).then(() => {
-      this.props.navigation.navigate("Message", {
-        message: "Friend request accepted.",
+      this.props.navigation.navigate('Message', {
+        message: 'Friend request accepted.',
       });
     });
   };
 
   rejectFriendRequest = async (id) => {
     rejectFriendRequest(this.state.token, id).then(() => {
-      this.props.navigation.navigate("Message", {
-        message: "Friend request rejected.",
+      this.props.navigation.navigate('Message', {
+        message: 'Friend request rejected.',
       });
     });
   };
@@ -87,11 +87,11 @@ class FriendRequestsScreen extends Component {
       <ScrollView>
         <FlatList
           data={this.state.listData}
-          renderItem={({ item, index }) => (
+          renderItem={({item, index}) => (
             <View>
               <Card>
                 <Card.Title>
-                  {item.first_name} {item.last_name}
+                  {item.firstName} {item.lastName}
                 </Card.Title>
 
                 <Card.Divider />

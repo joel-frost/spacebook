@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import { Button, ScrollView, TextInput, View, StyleSheet } from "react-native";
-import { editProfile } from "../api/SpacebookService";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, {Component} from 'react';
+import {Button, ScrollView, TextInput, View, StyleSheet} from 'react-native';
+import {editProfile} from '../api/SpacebookService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class EditProfileScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      first_name: "",
-      last_name: "",
-      email: "",
-      password: "",
-      token: "",
-      id: "",
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      token: '',
+      id: '',
     };
   }
 
@@ -22,8 +22,8 @@ class EditProfileScreen extends Component {
   };
 
   retrieveFromAsync = async () => {
-    const token = await AsyncStorage.getItem("@session_token");
-    const id = await AsyncStorage.getItem("@id");
+    const token = await AsyncStorage.getItem('@session_token');
+    const id = await AsyncStorage.getItem('@id');
 
     this.setState({
       token: token,
@@ -32,30 +32,30 @@ class EditProfileScreen extends Component {
   };
 
   editProfile() {
-    let updatedInfo = {};
-    if (this.state.first_name != "") {
-      updatedInfo.first_name = this.state.first_name;
+    const updatedInfo = {};
+    if (this.state.firstName != '') {
+      updatedInfo.firstName = this.state.firstName;
     }
-    if (this.state.last_name != "") {
-      updatedInfo.last_name = this.state.last_name;
+    if (this.state.lastName != '') {
+      updatedInfo.lastName = this.state.lastName;
     }
-    if (this.state.email != "") {
+    if (this.state.email != '') {
       updatedInfo.email = this.state.email;
     }
-    if (this.state.password != "") {
+    if (this.state.password != '') {
       updatedInfo.password = this.state.password;
     }
 
     editProfile(this.state.token, this.state.id, updatedInfo).then(
-      (response) => {
-        if (response.status === 200) {
-          this.props.navigation.navigate("Profile");
-        } else {
-          this.props.navigation.navigate("Message", {
-            message: "Unable to update profile, check entered details.",
-          });
+        (response) => {
+          if (response.status === 200) {
+            this.props.navigation.navigate('Profile');
+          } else {
+            this.props.navigation.navigate('Message', {
+              message: 'Unable to update profile, check entered details.',
+            });
+          }
         }
-      }
     );
   }
 
@@ -64,28 +64,28 @@ class EditProfileScreen extends Component {
       <ScrollView>
         <TextInput
           placeholder="First Name"
-          onChangeText={(first_name) => this.setState({ first_name })}
-          value={this.state.first_name}
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          onChangeText={(firstName) => this.setState({firstName})}
+          value={this.state.firstName}
+          style={{padding: 5, borderWidth: 1, margin: 5}}
         />
         <TextInput
           placeholder="Last Name"
-          onChangeText={(last_name) => this.setState({ last_name })}
-          value={this.state.last_name}
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          onChangeText={(lastName) => this.setState({lastName})}
+          value={this.state.lastName}
+          style={{padding: 5, borderWidth: 1, margin: 5}}
         />
         <TextInput
           placeholder="Email"
-          onChangeText={(email) => this.setState({ email })}
+          onChangeText={(email) => this.setState({email})}
           value={this.state.email}
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          style={{padding: 5, borderWidth: 1, margin: 5}}
         />
         <TextInput
           placeholder="Password"
-          onChangeText={(password) => this.setState({ password })}
+          onChangeText={(password) => this.setState({password})}
           value={this.state.password}
           secureTextEntry
-          style={{ padding: 5, borderWidth: 1, margin: 5 }}
+          style={{padding: 5, borderWidth: 1, margin: 5}}
         />
         <View style={styles.container}>
           <Button
@@ -96,7 +96,7 @@ class EditProfileScreen extends Component {
           <Button
             color="salmon"
             title="Change Profile Picture"
-            onPress={() => this.props.navigation.navigate("Take Photo")}
+            onPress={() => this.props.navigation.navigate('Take Photo')}
           />
         </View>
       </ScrollView>
@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     flex: 1,
-    alignItems: "center",
-    gap: 10
+    alignItems: 'center',
+    gap: 10,
   },
 });
 

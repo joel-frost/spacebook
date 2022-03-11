@@ -1,20 +1,20 @@
-import React, { Component } from "react";
-import { Text, ScrollView, Button, StyleSheet, View } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { logout } from "../api/SpacebookService";
+import React, {Component} from 'react';
+import {Text, ScrollView, Button, StyleSheet, View} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {logout} from '../api/SpacebookService';
 
 class LogoutScreen extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      token: "",
+      token: '',
       logoutConfirmed: false,
     };
   }
 
   componentDidMount() {
-    this._unsubscribe = this.props.navigation.addListener("focus", () => {
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.checkLoggedIn();
     });
   }
@@ -24,36 +24,38 @@ class LogoutScreen extends Component {
   }
 
   checkLoggedIn = async () => {
-    const value = await AsyncStorage.getItem("@session_token");
+    const value = await AsyncStorage.getItem('@session_token');
     if (value !== null) {
-      this.setState({ token: value });
+      this.setState({token: value});
     } else {
-      this.props.navigation.navigate("Login");
+      this.props.navigation.navigate('Login');
     }
   };
 
   logout = async () => {
     logout()
-      .then((response) => {
-        if (response.status === 200) {
-          this.props.navigation.navigate("Login");
-        } else if (response.status === 401) {
-          this.props.navigation.navigate("Login");
-        } else {
-          throw "Something went wrong";
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then((response) => {
+          if (response.status === 200) {
+            this.props.navigation.navigate('Login');
+          } else if (response.status === 401) {
+            this.props.navigation.navigate('Login');
+          } else {
+            throw new Error('Something went wrong');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   };
 
   render() {
     return (
       <ScrollView>
         <View style={styles.container}>
-          <Text style={styles.leavingText}>Thanks for using SpaceBook. Click Below to Logout</Text>
-        <Button color='tomato' title="Logout" onPress={() => this.logout()} />
+          <Text style={styles.leavingText}>
+            Thanks for using SpaceBook. Click Below to Logout
+          </Text>
+          <Button color='tomato' title="Logout" onPress={() => this.logout()} />
         </View>
       </ScrollView>
     );
@@ -70,10 +72,10 @@ const styles = StyleSheet.create({
   leavingText: {
     flex: 0.3,
     fontSize: 40,
-    textAlign: "center",
+    textAlign: 'center',
     fontWeight: 'bold',
-    margin: 30
-  }
+    margin: 30,
+  },
 });
 
 export default LogoutScreen;

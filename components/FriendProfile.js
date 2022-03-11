@@ -1,9 +1,15 @@
-import React, { Component } from "react";
-import { View, ActivityIndicator, ScrollView, StyleSheet, Button } from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FlatList } from "react-native-gesture-handler";
-import { Text, Card, Input, Avatar } from "react-native-elements";
-import Ionicons from "react-native-vector-icons/Ionicons";
+import React, {Component} from 'react';
+import {
+  View,
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  Button,
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {FlatList} from 'react-native-gesture-handler';
+import {Text, Card, Input, Avatar} from 'react-native-elements';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   getUser,
   getPosts,
@@ -11,7 +17,7 @@ import {
   deletePost,
   likePost,
   unlikePost,
-} from "../api/SpacebookService";
+} from '../api/SpacebookService';
 
 class FriendProfileScreen extends Component {
   constructor(props) {
@@ -20,12 +26,12 @@ class FriendProfileScreen extends Component {
     this.state = {
       isLoading: true,
       listData: [],
-      text: "",
-      first_name: "",
-      last_name: "",
-      email: "",
-      token: "",
-      id: "",
+      text: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      token: '',
+      id: '',
       photo: null,
     };
   }
@@ -35,8 +41,8 @@ class FriendProfileScreen extends Component {
     try {
       this.state.id = this.props.route.params.item.user_id;
     } catch (e) {
-      this.props.navigation.navigate("Message", {
-        message: "Unable to access profile, are you friends with this user?",
+      this.props.navigation.navigate('Message', {
+        message: 'Unable to access profile, are you friends with this user?',
       });
     }
 
@@ -47,7 +53,7 @@ class FriendProfileScreen extends Component {
   };
 
   retrieveFromAsync = async () => {
-    const token = await AsyncStorage.getItem("@session_token");
+    const token = await AsyncStorage.getItem('@session_token');
     this.setState({
       token: token,
     });
@@ -57,8 +63,8 @@ class FriendProfileScreen extends Component {
     getUser(this.state.token, this.state.id).then(async (responseJson) => {
       console.log(responseJson);
       this.setState({
-        first_name: responseJson.first_name,
-        last_name: responseJson.last_name,
+        firstName: responseJson.firstName,
+        lastName: responseJson.lastName,
         email: responseJson.email,
       });
     });
@@ -66,24 +72,24 @@ class FriendProfileScreen extends Component {
 
   getProfilePicture = async () => {
     fetch(`http://localhost:3333/api/1.0.0/user/${this.state.id}/photo`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "X-Authorization": this.state.token,
+        'X-Authorization': this.state.token,
       },
     })
-      .then((res) => {
-        return res.blob();
-      })
-      .then((resBlob) => {
-        let data = URL.createObjectURL(resBlob);
-        this.setState({
-          photo: data,
-          isLoading: false,
+        .then((res) => {
+          return res.blob();
+        })
+        .then((resBlob) => {
+          const data = URL.createObjectURL(resBlob);
+          this.setState({
+            photo: data,
+            isLoading: false,
+          });
+        })
+        .catch((err) => {
+          console.log('error', err);
         });
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
   };
 
   getPosts = async () => {
@@ -98,46 +104,46 @@ class FriendProfileScreen extends Component {
 
   submitPost = async () => {
     submitPost(this.state.token, this.state.id, this.state.text)
-      .then((response) => {
-        console.log(response);
-        this.setState({
-          text: "",
-        });
-        if (response.status === 201) {
-          this.getPosts();
-        } else {
-          this.props.navigation.navigate("Message", {
-            message: "Unable to create post, are you friends with this user?",
+        .then((response) => {
+          console.log(response);
+          this.setState({
+            text: '',
           });
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+          if (response.status === 201) {
+            this.getPosts();
+          } else {
+            this.props.navigation.navigate('Message', {
+              message: 'Unable to create post, are you friends with this user?',
+            });
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
   };
 
   deletePost = async (postID) => {
     deletePost(this.state.token, this.state.id, postID)
-      .then((response) => {
-        console.log(response);
-        if (response.status === 200) {
-          this.getPosts();
-        } else {
-          this.props.navigation.navigate("Message", {
-            message: "You can only delete posts you have created.",
-          });
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+        .then((response) => {
+          console.log(response);
+          if (response.status === 200) {
+            this.getPosts();
+          } else {
+            this.props.navigation.navigate('Message', {
+              message: 'You can only delete posts you have created.',
+            });
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
   };
 
   unlikePost = async (postID) => {
     unlikePost(this.state.token, this.state.id, postID).then((response) => {
       if (response.status !== 200) {
-        this.props.navigation.navigate("Message", {
-          message: "You are unable to like your own posts.",
+        this.props.navigation.navigate('Message', {
+          message: 'You are unable to like your own posts.',
         });
       }
       this.getPosts();
@@ -168,21 +174,21 @@ class FriendProfileScreen extends Component {
         <View style={styles.container}>
           <Avatar size={128} rounded source={this.state.photo} />
           <Text style={styles.nametext}>
-            {this.state.first_name} {this.state.last_name}
+            {this.state.firstName} {this.state.lastName}
           </Text>
           <Input
             placeholder="Type a post"
             multiline
             numberOfLines={5}
-            onChangeText={(text) => this.setState({ text })}
+            onChangeText={(text) => this.setState({text})}
             value={this.state.text}
           />
           <Button title="Post" color="salmon" onPress={this.submitPost} />
-          </View>
-          <View>
+        </View>
+        <View>
           <FlatList
             data={this.state.listData}
-            renderItem={({ item, index }) => (
+            renderItem={({item, index}) => (
               <View>
                 <Card>
                   <Ionicons
@@ -193,7 +199,7 @@ class FriendProfileScreen extends Component {
                     }}
                   />
                   <Card.Title>
-                    {item.author.first_name} {item.author.last_name}
+                    {item.author.firstName} {item.author.lastName}
                   </Card.Title>
 
                   <Card.Divider />
@@ -212,17 +218,15 @@ class FriendProfileScreen extends Component {
                     title="View Post"
                     color="salmon"
                     onPress={() =>
-                      this.props.navigation.navigate("Post", { item })
+                      this.props.navigation.navigate('Post', {item})
                     }
                   />
                 </Card>
               </View>
-
             )}
             keyExtractor={(item, index) => item.post_id.toString()}
           />
-          </View>
-
+        </View>
       </ScrollView>
     );
   }
@@ -231,7 +235,7 @@ class FriendProfileScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
     gap: 10,
     marginTop: 10,
   },
@@ -239,7 +243,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   nametext: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 25,
   },
 });

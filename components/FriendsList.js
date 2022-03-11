@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   View,
   ActivityIndicator,
@@ -6,10 +6,10 @@ import {
   FlatList,
   Button,
   StyleSheet,
-} from "react-native";
-import { Text, Card } from "react-native-elements";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getFriendsList } from "../api/SpacebookService";
+} from 'react-native';
+import {Text, Card} from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getFriendsList} from '../api/SpacebookService';
 
 class FriendsListScreen extends Component {
   constructor(props) {
@@ -18,8 +18,8 @@ class FriendsListScreen extends Component {
     this.state = {
       isLoading: true,
       listData: [],
-      token: "",
-      id: "",
+      token: '',
+      id: '',
     };
   }
 
@@ -29,8 +29,8 @@ class FriendsListScreen extends Component {
   };
 
   retrieveFromAsync = async () => {
-    const token = await AsyncStorage.getItem("@session_token");
-    const id = await AsyncStorage.getItem("@id");
+    const token = await AsyncStorage.getItem('@session_token');
+    const id = await AsyncStorage.getItem('@id');
 
     this.setState({
       token: token,
@@ -40,13 +40,13 @@ class FriendsListScreen extends Component {
 
   getFriendsList = async () => {
     getFriendsList(this.state.token, this.state.id).then(
-      async (responseJson) => {
-        console.log(responseJson);
-        this.setState({
-          isLoading: false,
-          listData: responseJson,
-        });
-      }
+        async (responseJson) => {
+          console.log(responseJson);
+          this.setState({
+            isLoading: false,
+            listData: responseJson,
+          });
+        }
     );
   };
 
@@ -69,7 +69,7 @@ class FriendsListScreen extends Component {
           <Button
             color="salmon"
             title="View Requests"
-            onPress={() => this.props.navigation.navigate("Friend Requests")}
+            onPress={() => this.props.navigation.navigate('Friend Requests')}
           />
         </View>
       );
@@ -80,12 +80,12 @@ class FriendsListScreen extends Component {
           <Button
             color="salmon"
             title="View Requests"
-            onPress={() => this.props.navigation.navigate("Friend Requests")}
+            onPress={() => this.props.navigation.navigate('Friend Requests')}
           />
         </View>
         <FlatList
           data={this.state.listData}
-          renderItem={({ item, index }) => (
+          renderItem={({item, index}) => (
             <View>
               <Card>
                 <Card.Title>
@@ -97,7 +97,7 @@ class FriendsListScreen extends Component {
                   color="salmon"
                   title="View Profile"
                   onPress={() =>
-                    this.props.navigation.navigate("Profile", { item })
+                    this.props.navigation.navigate('Profile', {item})
                   }
                 />
               </Card>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
   },
 });
 

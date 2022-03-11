@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { Camera } from "expo-camera";
-import { savePhoto } from "../api/SpacebookService";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, {Component} from 'react';
+import {StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import {Camera} from 'expo-camera';
+import {savePhoto} from '../api/SpacebookService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 class TakePhotoScreen extends Component {
   constructor(props) {
@@ -11,20 +11,20 @@ class TakePhotoScreen extends Component {
     this.state = {
       hasPermission: null,
       type: Camera.Constants.Type.back,
-      token: "",
-      id: "",
+      token: '',
+      id: '',
     };
   }
 
   async componentDidMount() {
     await this.retrieveFromAsync();
-    const { status } = await Camera.requestCameraPermissionsAsync();
-    this.setState({ hasPermission: status === "granted" });
+    const {status} = await Camera.requestCameraPermissionsAsync();
+    this.setState({hasPermission: status === 'granted'});
   }
 
   retrieveFromAsync = async () => {
-    const token = await AsyncStorage.getItem("@session_token");
-    const id = await AsyncStorage.getItem("@id");
+    const token = await AsyncStorage.getItem('@session_token');
+    const id = await AsyncStorage.getItem('@id');
 
     this.setState({
       token: token,
@@ -34,7 +34,7 @@ class TakePhotoScreen extends Component {
 
   savePhoto = async (data) => {
     savePhoto(this.state.token, this.state.id, data).then(() => {
-      this.props.navigation.navigate("Profile");
+      this.props.navigation.navigate('Profile');
     });
   };
 
@@ -88,21 +88,21 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
-    backgroundColor: "transparent",
-    flexDirection: "row",
-    alignItems: "center",
-    alignSelf: "center",
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignSelf: 'center',
   },
   button: {
     flex: 0.1,
-    alignSelf: "flex-end",
-    alignItems: "center",
+    alignSelf: 'flex-end',
+    alignItems: 'center',
     marginLeft: 75,
     marginBottom: 50,
   },
   text: {
     fontSize: 18,
-    color: "white",
-    textAlign: "center",
+    color: 'white',
+    textAlign: 'center',
   },
 });

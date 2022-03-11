@@ -1,15 +1,15 @@
-import React, { Component } from "react";
+import React, {Component} from 'react';
 import {
   View,
   ActivityIndicator,
   ScrollView,
   StyleSheet,
   Button,
-} from "react-native";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { FlatList } from "react-native-gesture-handler";
-import { Text, Card, Input, Avatar } from "react-native-elements";
-import Ionicons from "react-native-vector-icons/Ionicons";
+} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {FlatList} from 'react-native-gesture-handler';
+import {Text, Card, Input, Avatar} from 'react-native-elements';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {
   getUser,
   getPosts,
@@ -17,7 +17,7 @@ import {
   deletePost,
   likePost,
   unlikePost,
-} from "../api/SpacebookService";
+} from '../api/SpacebookService';
 
 class UserProfileScreen extends Component {
   constructor(props) {
@@ -26,18 +26,18 @@ class UserProfileScreen extends Component {
     this.state = {
       isLoading: true,
       listData: [],
-      text: "",
-      first_name: "",
-      last_name: "",
-      email: "",
-      token: "",
-      id: "",
+      text: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      token: '',
+      id: '',
       photo: null,
     };
   }
 
   componentDidMount() {
-    this._unsubscribe = this.props.navigation.addListener("focus", () => {
+    this._unsubscribe = this.props.navigation.addListener('focus', () => {
       this.getData();
     });
   }
@@ -47,8 +47,8 @@ class UserProfileScreen extends Component {
   }
 
   retrieveFromAsync = async () => {
-    const token = await AsyncStorage.getItem("@session_token");
-    const id = await AsyncStorage.getItem("@id");
+    const token = await AsyncStorage.getItem('@session_token');
+    const id = await AsyncStorage.getItem('@id');
 
     this.setState({
       token,
@@ -60,8 +60,8 @@ class UserProfileScreen extends Component {
     getUser(this.state.token, this.state.id).then(async (responseJson) => {
       console.log(responseJson);
       this.setState({
-        first_name: responseJson.first_name,
-        last_name: responseJson.last_name,
+        firstName: responseJson.firstName,
+        lastName: responseJson.lastName,
         email: responseJson.email,
       });
     });
@@ -71,7 +71,7 @@ class UserProfileScreen extends Component {
     console.log(this.state.listData);
     for (let i = 0; i < responseJson.length; i++) {
       responseJson[i].timestamp = new Date(
-        responseJson[i].timestamp
+          responseJson[i].timestamp
       ).toLocaleString();
     }
     return responseJson;
@@ -90,60 +90,60 @@ class UserProfileScreen extends Component {
 
   getProfilePicture = async () => {
     fetch(`http://localhost:3333/api/1.0.0/user/${this.state.id}/photo`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "X-Authorization": this.state.token,
+        'X-Authorization': this.state.token,
       },
     })
-      .then((res) => res.blob())
-      .then((resBlob) => {
-        const data = URL.createObjectURL(resBlob);
-        this.setState({
-          photo: data,
-          isLoading: false,
+        .then((res) => res.blob())
+        .then((resBlob) => {
+          const data = URL.createObjectURL(resBlob);
+          this.setState({
+            photo: data,
+            isLoading: false,
+          });
+        })
+        .catch((err) => {
+          console.log('error', err);
         });
-      })
-      .catch((err) => {
-        console.log("error", err);
-      });
   };
 
   submitPost = async () => {
     submitPost(this.state.token, this.state.id, this.state.text)
-      .then((response) => {
-        console.log(response);
-        this.setState({
-          text: "",
+        .then((response) => {
+          console.log(response);
+          this.setState({
+            text: '',
+          });
+          if (response.status === 201) {
+            this.getPosts();
+          } else if (response.status === 400) {
+            throw new Error('Unable to submit post');
+          } else {
+            throw new Error('Something went wrong');
+          }
+        })
+        .catch((e) => {
+          console.log(e);
         });
-        if (response.status === 201) {
-          this.getPosts();
-        } else if (response.status === 400) {
-          throw "Unable to submit post";
-        } else {
-          throw "Something went wrong";
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
   };
 
   deletePost = async (postID) => {
     deletePost(this.state.token, this.state.id, postID)
-      .then((response) => {
-        console.log(response);
-        if (response.status === 200) {
-          this.getPosts();
-          console.log("Post Deleted");
-        } else if (response.status === 400) {
-          throw "Unable to delete post";
-        } else {
-          throw "Something went wrong";
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+        .then((response) => {
+          console.log(response);
+          if (response.status === 200) {
+            this.getPosts();
+            console.log('Post Deleted');
+          } else if (response.status === 400) {
+            throw new Error('Unable to delete post');
+          } else {
+            throw new Error('Something went wrong');
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
   };
 
   getData = async () => {
@@ -156,8 +156,8 @@ class UserProfileScreen extends Component {
   unlikePost = async (postID) => {
     unlikePost(this.state.token, this.state.id, postID).then((response) => {
       if (response.status !== 200) {
-        this.props.navigation.navigate("Message", {
-          message: "You are unable to like your own posts.",
+        this.props.navigation.navigate('Message', {
+          message: 'You are unable to like your own posts.',
         });
       }
       this.getPosts();
@@ -188,26 +188,26 @@ class UserProfileScreen extends Component {
         <View style={styles.container}>
           <Avatar size={128} rounded source={this.state.photo} />
           <Text style={styles.nametext}>
-            {this.state.first_name} {this.state.last_name}
+            {this.state.firstName} {this.state.lastName}
           </Text>
           <Button
             title="Edit Profile"
             color="salmon"
-            onPress={() => this.props.navigation.navigate("Edit Profile")}
+            onPress={() => this.props.navigation.navigate('Edit Profile')}
           />
           <Input
             placeholder="Type a post"
             multiline
             numberOfLines={5}
-            onChangeText={(text) => this.setState({ text })}
+            onChangeText={(text) => this.setState({text})}
             value={this.state.text}
           />
           <Button title="Post" color="salmon" onPress={this.submitPost} />
-          </View>
-          <View>
+        </View>
+        <View>
           <FlatList
             data={this.state.listData}
-            renderItem={({ item, index }) => (
+            renderItem={({item, index}) => (
               <View>
                 <Card>
                   <Ionicons
@@ -218,7 +218,7 @@ class UserProfileScreen extends Component {
                     }}
                   />
                   <Card.Title>
-                    {item.author.first_name} {item.author.last_name}
+                    {item.author.firstName} {item.author.lastName}
                   </Card.Title>
 
                   <Card.Divider />
@@ -237,7 +237,7 @@ class UserProfileScreen extends Component {
                     title="View Post"
                     color="salmon"
                     onPress={() =>
-                      this.props.navigation.navigate("Post", { item })
+                      this.props.navigation.navigate('Post', {item})
                     }
                   />
                 </Card>
@@ -246,7 +246,7 @@ class UserProfileScreen extends Component {
             )}
             keyExtractor={(item, index) => item.post_id.toString()}
           />
-          </View>
+        </View>
 
       </ScrollView>
     );
@@ -256,7 +256,7 @@ class UserProfileScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
     gap: 10,
     marginTop: 10,
   },
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   nametext: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 25,
   },
 });

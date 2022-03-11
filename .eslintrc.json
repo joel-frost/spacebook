@@ -1,0 +1,9 @@
+{
+    "extends": "google",
+    "parser": "@babel/eslint-parser",
+    "rules": {
+      "require-jsdoc": "off",
+      "no-unused-vars": "off"
+
+    }
+  }

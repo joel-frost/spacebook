@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import UserProfileScreen from "../components/userProfile";
-import EditProfileScreen from "../components/EditProfile";
-import PostScreen from "../components/Post";
-import EditPostScreen from "../components/EditPost";
-import TakePhotoScreen from "../components/TakePhoto";
+import React, {Component} from 'react';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import UserProfileScreen from '../components/userProfile';
+import EditProfileScreen from '../components/EditProfile';
+import PostScreen from '../components/Post';
+import EditPostScreen from '../components/EditPost';
+import TakePhotoScreen from '../components/TakePhoto';
 
 const ProfileStack = createNativeStackNavigator();
 
@@ -15,7 +15,7 @@ class UserProfileNavigator extends Component {
         <ProfileStack.Screen
           name="Profile"
           component={UserProfileScreen}
-          options={{ headerShown: false }}
+          options={{headerShown: false}}
         />
         <ProfileStack.Screen name="Post" component={PostScreen} />
         <ProfileStack.Screen

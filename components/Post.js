@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { View, ActivityIndicator, StyleSheet, Button } from "react-native";
-import { Text } from "react-native-elements";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getPost } from "../api/SpacebookService";
+import React, {Component} from 'react';
+import {View, ActivityIndicator, StyleSheet, Button} from 'react-native';
+import {Text} from 'react-native-elements';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {getPost} from '../api/SpacebookService';
 
 class PostScreen extends Component {
   constructor(props) {
@@ -10,10 +10,10 @@ class PostScreen extends Component {
 
     this.state = {
       isLoading: true,
-      token: "",
-      postID: "",
-      userID: "",
-      sessionID: "",
+      token: '',
+      postID: '',
+      userID: '',
+      sessionID: '',
       post: {},
       isAuthor: false,
     };
@@ -27,7 +27,7 @@ class PostScreen extends Component {
         userID: this.props.route.params.item.author.user_id,
       });
     } catch (e) {
-      throw "Unable to access post";
+      throw new Error('Unable to access post');
     }
 
     await this.retrieveFromAsync();
@@ -36,16 +36,16 @@ class PostScreen extends Component {
   };
 
   checkAuthor() {
-      console.log(this.state.userID);
-      console.log(this.state.sessionID);
+    console.log(this.state.userID);
+    console.log(this.state.sessionID);
     if (this.state.userID.toString() === this.state.sessionID.toString()) {
-      this.setState({ isAuthor: true });
+      this.setState({isAuthor: true});
     }
   }
 
   retrieveFromAsync = async () => {
-    const token = await AsyncStorage.getItem("@session_token");
-    const id = await AsyncStorage.getItem("@id");
+    const token = await AsyncStorage.getItem('@session_token');
+    const id = await AsyncStorage.getItem('@id');
     this.setState({
       token: token,
       sessionID: id,
@@ -60,13 +60,13 @@ class PostScreen extends Component {
 
   getPost() {
     getPost(this.state.token, this.state.userID, this.state.postID).then(
-      (response) => {
-        let formattedResponse = this.formatDate(response);
-        this.setState({
-          post: formattedResponse,
-          isLoading: false,
-        });
-      }
+        (response) => {
+          const formattedResponse = this.formatDate(response);
+          this.setState({
+            post: formattedResponse,
+            isLoading: false,
+          });
+        }
     );
   }
 
@@ -82,8 +82,8 @@ class PostScreen extends Component {
       return (
         <View style={styles.container}>
           <Text style={styles.maintext}>
-            {this.state.post.author.first_name}{" "}
-            {this.state.post.author.last_name}
+            {this.state.post.author.firstName}{' '}
+            {this.state.post.author.lastName}
           </Text>
           <Text style={styles.posttext}>{this.state.post.text}</Text>
           <Text style={styles.maintext}>
@@ -91,9 +91,10 @@ class PostScreen extends Component {
           </Text>
           <Text style={styles.maintext}>{this.state.post.timestamp}</Text>
           <Button
-          color="salmon"
+            color="salmon"
             title="Edit Post"
-            onPress={() => this.props.navigation.navigate("Edit Post", {postID: this.state.postID})}
+            onPress={() => this.props.navigation.navigate('Edit Post',
+                {postID: this.state.postID})}
           />
         </View>
       );
@@ -101,7 +102,7 @@ class PostScreen extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.maintext}>
-          {this.state.post.author.first_name} {this.state.post.author.last_name}
+          {this.state.post.author.firstName} {this.state.post.author.lastName}
         </Text>
         <Text style={styles.posttext}>{this.state.post.text}</Text>
         <Text style={styles.maintext}>
@@ -116,12 +117,12 @@ class PostScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
     gap: 10,
     marginTop: 100,
   },
   maintext: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 25,
   },
   posttext: {
