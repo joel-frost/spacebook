@@ -51,13 +51,13 @@ class LoginScreen extends Component {
         <Text style={styles.welcomeText}>Welcome to SpaceBook</Text>
         <View>
           <TextInput
-            placeholder="Enter your email..."
+            placeholder="Email"
             onChangeText={(email) => this.setState({email})}
             value={this.state.email}
             style={{padding: 5, borderWidth: 1, margin: 5}}
           />
           <TextInput
-            placeholder="Enter your password..."
+            placeholder="Password"
             onChangeText={(password) => this.setState({password})}
             value={this.state.password}
             secureTextEntry

@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 10,
-    borderBottomWidth: 1.0,
+    borderWidth: 1,
   },
 });
 

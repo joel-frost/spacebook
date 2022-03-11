@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Button, ScrollView, TextInput} from 'react-native';
+import {Button, ScrollView, TextInput, View} from 'react-native';
 import {signup} from '../api/SpacebookService';
 
 class SignupScreen extends Component {
@@ -39,38 +39,41 @@ class SignupScreen extends Component {
     return (
       <ScrollView>
         <TextInput
-          placeholder="Enter your first name..."
+          placeholder="First Name"
           onChangeText={(first_name) => this.setState({first_name})}
           value={this.state.first_name}
           style={{padding: 5, borderWidth: 1, margin: 5}}
         />
         <TextInput
-          placeholder="Enter your last name..."
+          placeholder="Last Name"
           onChangeText={(last_name) => this.setState({last_name})}
           value={this.state.last_name}
           style={{padding: 5, borderWidth: 1, margin: 5}}
         />
         <TextInput
-          placeholder="Enter your email..."
+          placeholder="Email"
           onChangeText={(email) => this.setState({email})}
           value={this.state.email}
           style={{padding: 5, borderWidth: 1, margin: 5}}
         />
         <TextInput
-          placeholder="Enter your password..."
+          placeholder="Password"
           onChangeText={(password) => this.setState({password})}
           value={this.state.password}
           secureTextEntry
           style={{padding: 5, borderWidth: 1, margin: 5}}
         />
         <TextInput
-          placeholder="Re-enter your password..."
+          placeholder="Confirm Password"
           onChangeText={(confPassword) => this.setState({confPassword})}
           value={this.state.confPassword}
           secureTextEntry
           style={{padding: 5, borderWidth: 1, margin: 5}}
         />
-        <Button title="Create an account" onPress={() => this.signup()} />
+        <View style={{flex: 1, alignItems: 'center', marginTop: 10}} >
+          <Button color="salmon"
+            title="Create an account" onPress={() => this.signup()} />
+        </View>
       </ScrollView>
     );
   }
