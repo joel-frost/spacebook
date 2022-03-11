@@ -8,8 +8,8 @@ class EditProfileScreen extends Component {
     super(props);
 
     this.state = {
-      firstName: '',
-      lastName: '',
+      first_name: '',
+      last_name: '',
       email: '',
       password: '',
       token: '',
@@ -33,17 +33,23 @@ class EditProfileScreen extends Component {
 
   editProfile() {
     const updatedInfo = {};
-    if (this.state.firstName != '') {
-      updatedInfo.firstName = this.state.firstName;
+    if (this.state.first_name != '') {
+      updatedInfo.first_name = this.state.first_name;
     }
-    if (this.state.lastName != '') {
-      updatedInfo.lastName = this.state.lastName;
+    if (this.state.last_name != '') {
+      updatedInfo.last_name = this.state.last_name;
     }
     if (this.state.email != '') {
       updatedInfo.email = this.state.email;
     }
     if (this.state.password != '') {
       updatedInfo.password = this.state.password;
+    }
+
+    if (Object.keys(updatedInfo).length === 0) {
+      this.props.navigation.navigate('Message',
+          {message: 'Please enter details you wish to update.'});
+      return;
     }
 
     editProfile(this.state.token, this.state.id, updatedInfo).then(
@@ -64,14 +70,14 @@ class EditProfileScreen extends Component {
       <ScrollView>
         <TextInput
           placeholder="First Name"
-          onChangeText={(firstName) => this.setState({firstName})}
-          value={this.state.firstName}
+          onChangeText={(first_name) => this.setState({first_name})}
+          value={this.state.first_name}
           style={{padding: 5, borderWidth: 1, margin: 5}}
         />
         <TextInput
           placeholder="Last Name"
-          onChangeText={(lastName) => this.setState({lastName})}
-          value={this.state.lastName}
+          onChangeText={(last_name) => this.setState({last_name})}
+          value={this.state.last_name}
           style={{padding: 5, borderWidth: 1, margin: 5}}
         />
         <TextInput

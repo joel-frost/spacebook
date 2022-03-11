@@ -82,8 +82,8 @@ class PostScreen extends Component {
       return (
         <View style={styles.container}>
           <Text style={styles.maintext}>
-            {this.state.post.author.firstName}{' '}
-            {this.state.post.author.lastName}
+            {this.state.post.author.first_name}{' '}
+            {this.state.post.author.last_name}
           </Text>
           <Text style={styles.posttext}>{this.state.post.text}</Text>
           <Text style={styles.maintext}>
@@ -102,7 +102,7 @@ class PostScreen extends Component {
     return (
       <View style={styles.container}>
         <Text style={styles.maintext}>
-          {this.state.post.author.firstName} {this.state.post.author.lastName}
+          {this.state.post.author.first_name} {this.state.post.author.last_name}
         </Text>
         <Text style={styles.posttext}>{this.state.post.text}</Text>
         <Text style={styles.maintext}>

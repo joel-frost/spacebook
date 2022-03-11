@@ -40,6 +40,8 @@ class EditPostScreen extends Component {
     const updatedInfo = {};
     if (this.state.text != '') {
       updatedInfo.text = this.state.text;
+    } else {
+      return;
     }
 
     editPost(

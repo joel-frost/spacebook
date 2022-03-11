@@ -91,7 +91,7 @@ class FriendRequestsScreen extends Component {
             <View>
               <Card>
                 <Card.Title>
-                  {item.firstName} {item.lastName}
+                  {item.first_name} {item.last_name}
                 </Card.Title>
 
                 <Card.Divider />

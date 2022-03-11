@@ -27,8 +27,8 @@ class UserProfileScreen extends Component {
       isLoading: true,
       listData: [],
       text: '',
-      firstName: '',
-      lastName: '',
+      first_name: '',
+      last_name: '',
       email: '',
       token: '',
       id: '',
@@ -60,8 +60,8 @@ class UserProfileScreen extends Component {
     getUser(this.state.token, this.state.id).then(async (responseJson) => {
       console.log(responseJson);
       this.setState({
-        firstName: responseJson.firstName,
-        lastName: responseJson.lastName,
+        first_name: responseJson.first_name,
+        last_name: responseJson.last_name,
         email: responseJson.email,
       });
     });
@@ -188,7 +188,7 @@ class UserProfileScreen extends Component {
         <View style={styles.container}>
           <Avatar size={128} rounded source={this.state.photo} />
           <Text style={styles.nametext}>
-            {this.state.firstName} {this.state.lastName}
+            {this.state.first_name} {this.state.last_name}
           </Text>
           <Button
             title="Edit Profile"
@@ -218,7 +218,7 @@ class UserProfileScreen extends Component {
                     }}
                   />
                   <Card.Title>
-                    {item.author.firstName} {item.author.lastName}
+                    {item.author.first_name} {item.author.last_name}
                   </Card.Title>
 
                   <Card.Divider />

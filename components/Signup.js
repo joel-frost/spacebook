@@ -7,8 +7,8 @@ class SignupScreen extends Component {
     super(props);
 
     this.state = {
-      firstName: '',
-      lastName: '',
+      first_name: '',
+      last_name: '',
       email: '',
       password: '',
       confPassword: '',
@@ -40,14 +40,14 @@ class SignupScreen extends Component {
       <ScrollView>
         <TextInput
           placeholder="Enter your first name..."
-          onChangeText={(firstName) => this.setState({firstName})}
-          value={this.state.firstName}
+          onChangeText={(first_name) => this.setState({first_name})}
+          value={this.state.first_name}
           style={{padding: 5, borderWidth: 1, margin: 5}}
         />
         <TextInput
           placeholder="Enter your last name..."
-          onChangeText={(lastName) => this.setState({lastName})}
-          value={this.state.lastName}
+          onChangeText={(last_name) => this.setState({last_name})}
+          value={this.state.last_name}
           style={{padding: 5, borderWidth: 1, margin: 5}}
         />
         <TextInput
