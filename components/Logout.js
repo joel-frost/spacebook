@@ -44,7 +44,7 @@ class LogoutScreen extends Component {
           }
         })
         .catch((error) => {
-          console.log(error);
+
         });
   };
 

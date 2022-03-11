@@ -43,7 +43,6 @@ class FriendRequestsScreen extends Component {
 
   getFriendRequests = async () => {
     getFriendRequests(this.state.token).then((response) => {
-      console.log(response);
       this.setState({
         isLoading: false,
         listData: response,

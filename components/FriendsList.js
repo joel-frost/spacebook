@@ -41,7 +41,6 @@ class FriendsListScreen extends Component {
   getFriendsList = async () => {
     getFriendsList(this.state.token, this.state.id).then(
         async (responseJson) => {
-          console.log(responseJson);
           this.setState({
             isLoading: false,
             listData: responseJson,

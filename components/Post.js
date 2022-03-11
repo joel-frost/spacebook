@@ -20,7 +20,6 @@ class PostScreen extends Component {
   }
 
   componentDidMount = async () => {
-    console.log(this.props.route.params.item.post_id);
     try {
       this.setState({
         postID: this.props.route.params.item.post_id,
@@ -36,8 +35,6 @@ class PostScreen extends Component {
   };
 
   checkAuthor() {
-    console.log(this.state.userID);
-    console.log(this.state.sessionID);
     if (this.state.userID.toString() === this.state.sessionID.toString()) {
       this.setState({isAuthor: true});
     }

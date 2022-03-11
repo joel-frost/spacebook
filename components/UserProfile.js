@@ -58,7 +58,6 @@ class UserProfileScreen extends Component {
 
   getUser = async () => {
     getUser(this.state.token, this.state.id).then(async (responseJson) => {
-      console.log(responseJson);
       this.setState({
         first_name: responseJson.first_name,
         last_name: responseJson.last_name,
@@ -68,7 +67,6 @@ class UserProfileScreen extends Component {
   };
 
   formatDates(responseJson) {
-    console.log(this.state.listData);
     for (let i = 0; i < responseJson.length; i++) {
       responseJson[i].timestamp = new Date(
           responseJson[i].timestamp
@@ -79,7 +77,6 @@ class UserProfileScreen extends Component {
 
   getPosts = async () => {
     getPosts(this.state.token, this.state.id).then(async (responseJson) => {
-      console.log(responseJson);
       const formattedData = this.formatDates(responseJson);
       this.setState({
         isLoading: false,
@@ -104,14 +101,13 @@ class UserProfileScreen extends Component {
           });
         })
         .catch((err) => {
-          console.log('error', err);
+
         });
   };
 
   submitPost = async () => {
     submitPost(this.state.token, this.state.id, this.state.text)
         .then((response) => {
-          console.log(response);
           this.setState({
             text: '',
           });
@@ -124,17 +120,15 @@ class UserProfileScreen extends Component {
           }
         })
         .catch((e) => {
-          console.log(e);
+
         });
   };
 
   deletePost = async (postID) => {
     deletePost(this.state.token, this.state.id, postID)
         .then((response) => {
-          console.log(response);
           if (response.status === 200) {
             this.getPosts();
-            console.log('Post Deleted');
           } else if (response.status === 400) {
             throw new Error('Unable to delete post');
           } else {
@@ -142,7 +136,7 @@ class UserProfileScreen extends Component {
           }
         })
         .catch((e) => {
-          console.log(e);
+
         });
   };
 

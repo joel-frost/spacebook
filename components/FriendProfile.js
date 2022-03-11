@@ -37,7 +37,6 @@ class FriendProfileScreen extends Component {
   }
 
   componentDidMount = async () => {
-    console.log(this.props.route.params.item.user_id);
     try {
       this.state.id = this.props.route.params.item.user_id;
     } catch (e) {
@@ -61,7 +60,6 @@ class FriendProfileScreen extends Component {
 
   getUser = async () => {
     getUser(this.state.token, this.state.id).then(async (responseJson) => {
-      console.log(responseJson);
       this.setState({
         first_name: responseJson.first_name,
         last_name: responseJson.last_name,
@@ -88,13 +86,12 @@ class FriendProfileScreen extends Component {
           });
         })
         .catch((err) => {
-          console.log('error', err);
+
         });
   };
 
   getPosts = async () => {
     getPosts(this.state.token, this.state.id).then(async (responseJson) => {
-      console.log(responseJson);
       this.setState({
         isLoading: false,
         listData: responseJson,
@@ -105,7 +102,6 @@ class FriendProfileScreen extends Component {
   submitPost = async () => {
     submitPost(this.state.token, this.state.id, this.state.text)
         .then((response) => {
-          console.log(response);
           this.setState({
             text: '',
           });
@@ -118,14 +114,13 @@ class FriendProfileScreen extends Component {
           }
         })
         .catch((e) => {
-          console.log(e);
+
         });
   };
 
   deletePost = async (postID) => {
     deletePost(this.state.token, this.state.id, postID)
         .then((response) => {
-          console.log(response);
           if (response.status === 200) {
             this.getPosts();
           } else {
@@ -135,7 +130,7 @@ class FriendProfileScreen extends Component {
           }
         })
         .catch((e) => {
-          console.log(e);
+
         });
   };
 

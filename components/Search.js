@@ -30,10 +30,9 @@ class SearchScreen extends Component {
 
   updateSearch = async () => {
     this.setState.isLoading = true;
-    console.log(this.state.searchTerm);
+
     updateSearch(this.state.token, this.state.searchTerm).then(
         async (responseJson) => {
-          console.log(responseJson);
           this.setState({
             isLoading: false,
             listData: responseJson,

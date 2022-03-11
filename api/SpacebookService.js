@@ -28,7 +28,6 @@ export const logout = async () => {
 };
 
 export const editProfile = async (token, id, updatedInfo) => {
-  console.log(JSON.stringify(updatedInfo));
   return fetch(`http://localhost:3333/api/1.0.0/user/${id}/`, {
     method: 'PATCH',
     headers: {
@@ -43,8 +42,6 @@ export const editProfile = async (token, id, updatedInfo) => {
 };
 
 export const getUser = async (token, id) => {
-  console.log(token);
-  console.log(id);
   return fetch(`http://localhost:3333/api/1.0.0/user/${id}/`, {
     method: 'get',
     headers: {
@@ -236,7 +233,7 @@ export const likePost = async (token, id, postID) => {
         return response;
       })
       .catch((e) => {
-        console.log(e);
+
       });
 };
 
@@ -275,7 +272,6 @@ export const getPost = async (token, id, postID) => {
 };
 
 export const editPost = async (token, id, postID, updatedInfo) => {
-  console.log(JSON.stringify(updatedInfo));
   return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post/${postID}`, {
     method: 'PATCH',
     headers: {
@@ -303,10 +299,10 @@ export const savePhoto = async (token, id, data) => {
     body: blob,
   })
       .then((response) => {
-        console.log('Picture added', response);
+
       })
       .catch((err) => {
-        console.log(err);
+
       });
 };
 
