@@ -258,8 +258,8 @@ export const updateSearch = async (token, searchTerm) => {
     });
 };
 
-export const addFriend = async (token, userID) => {
-  return fetch(`http://localhost:3333/api/1.0.0/user/${userID}/friends`, {
+export const addFriend = async (token, id) => {
+  return fetch(`http://localhost:3333/api/1.0.0/user/${id}/friends`, {
     method: "post",
     headers: {
       "Content-Type": "application/json",
@@ -279,4 +279,32 @@ export const addFriend = async (token, userID) => {
     .catch((e) => {
       console.log(e);
     });
+};
+
+export const likePost = async (token, id, postID) => {
+  return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post/${postID}/like`, {
+    method: "post",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Authorization": token,
+    },
+  })
+    .then((response) => {
+      return response;
+    })
+    .catch((e) => {
+      console.log(e);
+    });
+}
+
+export const unlikePost = async (token, id, postID) => {
+  return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post/${postID}/like`, {
+    method: "delete",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Authorization": token,
+    },
+  }).then((response) => {
+    return response;
+  });
 };

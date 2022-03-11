@@ -9,6 +9,7 @@ import {
   getPosts,
   submitPost,
   deletePost,
+  likePost
 } from "../api/SpacebookService";
 
 //TODO: Edit Post, Edit Profile, Add Photo
@@ -113,6 +114,12 @@ class UserProfileScreen extends Component {
     this.getPosts();
   }
 
+  likePost = async (postID) => {
+    likePost(this.state.token, this.state.id, postID).then(() => {
+      this.getData();
+    });
+  }
+
 
   render() {
     if (this.state.isLoading) {
@@ -123,14 +130,7 @@ class UserProfileScreen extends Component {
       );
     }
     return (
-      <ScrollView
-        refreshControl={
-          <RefreshControl
-            refreshing={this.state.isLoading}
-            onRefresh={() => this.onRefresh()}
-          />
-        }
-      >
+      <ScrollView>
         <View style={styles.container}>
           <Avatar
             size={128}
@@ -172,8 +172,15 @@ class UserProfileScreen extends Component {
                   <Card.Divider />
                   <Text>{item.text}</Text>
                   <Card.Divider style={styles.divider} />
+                  <Ionicons
+                    name={"thumbs-up-outline"}
+                    size={16}
+                    onPress={() => {
+                      this.likePost(item.post_id);
+                    }}
+                  />
                   <Text>
-                    Likes: {item.numlikes} Time: {item.timestamp}
+                    Likes: {item.numLikes.toString()} Time: {item.timestamp}
                   </Text>
                 </Card>
               </View>

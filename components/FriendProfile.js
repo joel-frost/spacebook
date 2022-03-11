@@ -9,6 +9,8 @@ import {
   getPosts,
   submitPost,
   deletePost,
+  likePost,
+  unlikePost
 } from "../api/SpacebookService";
 
 class FriendProfileScreen extends Component {
@@ -106,6 +108,26 @@ class FriendProfileScreen extends Component {
       });
   };
 
+  unlikePost = async (postID) => {
+    unlikePost(this.state.token, this.state.id, postID).then(() => {
+      this.getPosts();
+    });
+  }
+
+  likePost = async (postID) => {
+    likePost(this.state.token, this.state.id, postID).then((response) => {
+      if (response.status === 200) {
+        this.getPosts();
+        return response;
+      } else if (response.status === 400) {
+        this.unlikePost(postID);
+        return response;
+      } else {
+        throw "Something went wrong";
+      }
+    });
+  }
+
   render() {
     if (this.state.isLoading) {
       return (
@@ -153,8 +175,15 @@ class FriendProfileScreen extends Component {
                   <Card.Divider />
                   <Text>{item.text}</Text>
                   <Card.Divider style={styles.divider} />
+                  <Ionicons
+                    name={"thumbs-up-outline"}
+                    size={16}
+                    onPress={() => {
+                      this.likePost(item.post_id);
+                    }}
+                  />
                   <Text>
-                    Likes: {item.numlikes} Time: {item.timestamp}
+                    Likes: {item.numLikes.toString()} Time: {item.timestamp}
                   </Text>
                 </Card>
               </View>
