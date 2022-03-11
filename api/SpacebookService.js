@@ -139,7 +139,7 @@ export const acceptFriendRequest = async (token, id) => {
     },
   }).then((response) => {
     if (response.status === 200) {
-      return response.json();
+      return response;
     } else {
       throw new Error('Something went wrong');
     }
@@ -155,7 +155,7 @@ export const rejectFriendRequest = async (token, id) => {
     },
   }).then((response) => {
     if (response.status === 200) {
-      return response.json();
+      return response;
     } else {
       throw new Error('Something went wrong');
     }
@@ -298,10 +298,10 @@ export const savePhoto = async (token, id, data) => {
     body: blob,
   })
       .then((response) => {
-
+        return response;
       })
       .catch((err) => {
-
+        throw new Error(err);
       });
 };
 

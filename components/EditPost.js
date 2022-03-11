@@ -19,7 +19,7 @@ class EditPostScreen extends Component {
     try {
       this.state.postID = this.props.route.params.postID;
     } catch (e) {
-      this.props.navigation.navigate('Error', {
+      this.props.navigation.navigate('Message', {
         message: 'Unable to access post at this time.',
       });
     }
@@ -36,7 +36,7 @@ class EditPostScreen extends Component {
     });
   };
 
-  editPost() {
+  editPost = async () => {
     const updatedInfo = {};
     if (this.state.text != '') {
       updatedInfo.text = this.state.text;
@@ -59,11 +59,10 @@ class EditPostScreen extends Component {
         });
         return;
       } else {
-        this.props.navigation.navigate('Error',
-            {message: 'Unable to edit post'});
+        this.props.navigation.navigate('Profile');
       }
     });
-  }
+  };
 
   render() {
     return (
