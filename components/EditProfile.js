@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, ScrollView, TextInput } from "react-native";
+import { Button, ScrollView, TextInput, View, StyleSheet } from "react-native";
 import { editProfile } from "../api/SpacebookService";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -46,9 +46,17 @@ class EditProfileScreen extends Component {
       updatedInfo.password = this.state.password;
     }
 
-    editProfile(this.state.token, this.state.id, updatedInfo).then(() => {
-      this.props.navigation.navigate("Profile");
-    });
+    editProfile(this.state.token, this.state.id, updatedInfo).then(
+      (response) => {
+        if (response.status === 200) {
+          this.props.navigation.navigate("Profile");
+        } else {
+          this.props.navigation.navigate("Message", {
+            message: "Unable to update profile, check entered details.",
+          });
+        }
+      }
+    );
   }
 
   render() {
@@ -79,14 +87,31 @@ class EditProfileScreen extends Component {
           secureTextEntry
           style={{ padding: 5, borderWidth: 1, margin: 5 }}
         />
-        <Button title="Update Details" onPress={() => this.editProfile()} />
-        <Button
-          title="Change Profile Picture"
-          onPress={() => this.props.navigation.navigate("Take Photo")}
-        />
+        <View style={styles.container}>
+          <Button
+            color="salmon"
+            title="Update Details"
+            onPress={() => this.editProfile()}
+          />
+          <Button
+            color="salmon"
+            title="Change Profile Picture"
+            onPress={() => this.props.navigation.navigate("Take Photo")}
+          />
+        </View>
       </ScrollView>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 10,
+    marginBottom: 10,
+    flex: 1,
+    alignItems: "center",
+    gap: 10
+  },
+});
 
 export default EditProfileScreen;

@@ -1,31 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-// export const login = async (account) => {
-//   // Validation here...
-//   fetch("http://localhost:3333/api/1.0.0/login", {
-//     method: "post",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(account),
-//   }).then((response) => {
-//     if (response.status === 200) {
-//       return response.json();
-//     }
-//     if (response.status === 400) {
-//       throw "Invalid email or password";
-//     } else {
-//       throw "Something went wrong";
-//     }
-//   }).then(async (response) => {
-//     return response;
-    
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
-// };
-
 export const signup = async (account) => {
   return fetch("http://localhost:3333/api/1.0.0/user", {
             method: 'post',
@@ -35,21 +9,10 @@ export const signup = async (account) => {
             body: JSON.stringify(account)
         })
         .then((response) => {
-            if(response.status === 201){
-                return response.json()
-            }else if(response.status === 400){
-                throw 'Failed validation';
-            }else{
-                throw 'Something went wrong';
-            }
-        })
-        .then((responseJson) => {
-               console.log("User created with ID: ", responseJson);
-               return responseJson;
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+          return response;
+            
+        });
+
 }
 
 export const logout = async () => {
@@ -77,14 +40,7 @@ export const editProfile = async (token, id, updatedInfo) => {
     body: JSON.stringify(updatedInfo)
     
   }).then((response) => {
-    if (response.status === 200) {
-      return response;
-    }
-    if (response.status === 400) {
-      throw "Unable to update";
-    } else {
-      throw "Something went wrong";
-    }
+    return response;
   });
   
 }
@@ -267,18 +223,8 @@ export const addFriend = async (token, id) => {
     },
   })
     .then((response) => {
-      console.log(response);
-      if (response.status === 201) {
-        return response;
-      } else if (response.status === 400) {
-        throw "Unable to add friend";
-      } else {
-        throw "Something went wrong";
-      }
+      return response;
     })
-    .catch((e) => {
-      console.log(e);
-    });
 };
 
 export const likePost = async (token, id, postID) => {
@@ -342,14 +288,7 @@ export const editPost = async (token, id, postID, updatedInfo) => {
     body: JSON.stringify(updatedInfo)
     
   }).then((response) => {
-    if (response.status === 200) {
-      return response;
-    }
-    if (response.status === 400) {
-      throw "Unable to update";
-    } else {
-      throw "Something went wrong";
-    }
+    return response;
   });
   
 }

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { SearchBar, Button, Card, Text } from "react-native-elements";
+import { Card } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
-import { ScrollView, FlatList } from "react-native-gesture-handler";
+import { View, ActivityIndicator, StyleSheet, Button } from "react-native";
+import { ScrollView, FlatList, TextInput } from "react-native-gesture-handler";
 import { updateSearch, addFriend } from "../api/SpacebookService";
 
 class SearchScreen extends Component {
@@ -16,9 +16,9 @@ class SearchScreen extends Component {
     };
   }
 
-  componentDidMount = async() => {
+  componentDidMount = async () => {
     await this.retrieveFromAsync();
-  }
+  };
 
   retrieveFromAsync = async () => {
     const token = await AsyncStorage.getItem("@session_token");
@@ -31,19 +31,30 @@ class SearchScreen extends Component {
   updateSearch = async () => {
     this.setState.isLoading = true;
     console.log(this.state.searchTerm);
-    updateSearch(this.state.token, this.state.searchTerm)
-    .then(async (responseJson) => {
-      console.log(responseJson);
-      this.setState({
-        isLoading: false,
-        listData: responseJson,
-      });
-    });
-      
+    updateSearch(this.state.token, this.state.searchTerm).then(
+      async (responseJson) => {
+        console.log(responseJson);
+        this.setState({
+          isLoading: false,
+          listData: responseJson,
+        });
+      }
+    );
   };
 
   addFriend = async (userID) => {
-    addFriend(this.state.token, userID);
+    addFriend(this.state.token, userID).then((response) => {
+      if (response.status === 201) {
+        this.props.navigation.navigate("Message", {
+          message: "Friend Request Sent",
+        });
+      } else {
+        this.props.navigation.navigate("Message", {
+          message:
+            "Unable to add friend, you may already have added this person.",
+        });
+      }
+    });
   };
 
   render() {
@@ -55,16 +66,24 @@ class SearchScreen extends Component {
       );
     }
 
-    //<Button title="View Profile" onPress={() => this.props.navigation.navigate("Profile", {item})}/>
     return (
       <ScrollView>
-        <View>
-          <SearchBar
+        <View style={styles.container}>
+          <TextInput
+            style={styles.input}
+            multiline
+            numberOfLines={3}
             placeholder="Enter Name"
             onChangeText={(searchTerm) => this.setState({ searchTerm })}
             value={this.state.searchTerm}
           />
-          <Button title="Search" onPress={() => this.updateSearch()} />
+          <Button
+            color="salmon"
+            title="Search"
+            onPress={() => this.updateSearch()}
+          />
+        </View>
+        <View>
           <FlatList
             data={this.state.listData}
             renderItem={({ item, index }) => (
@@ -75,6 +94,7 @@ class SearchScreen extends Component {
                   </Card.Title>
                   <Card.Divider />
                   <Button
+                  color="salmon"
                     title="Add Friend"
                     onPress={() => this.addFriend(item.user_id)}
                   />
@@ -92,8 +112,17 @@ class SearchScreen extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 20,
+    alignItems: "center",
+  },
   divider: {
     marginTop: 10,
+  },
+  input: {
+    marginBottom: 10,
+    borderBottomWidth : 1.0
   },
 });
 

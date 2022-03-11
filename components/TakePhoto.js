@@ -32,7 +32,7 @@ class TakePhotoScreen extends Component {
     });
   };
 
-  sendToServer = async (data) => {
+  savePhoto = async (data) => {
     savePhoto(this.state.token, this.state.id, data).then(() => {
       this.props.navigation.navigate("Profile");
     });
@@ -43,7 +43,7 @@ class TakePhotoScreen extends Component {
       const options = {
         quality: 0.5,
         base64: true,
-        onPictureSaved: (data) => this.sendToServer(data),
+        onPictureSaved: (data) => this.savePhoto(data),
       };
       await this.camera.takePictureAsync(options);
     }
@@ -90,15 +90,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "transparent",
     flexDirection: "row",
-    margin: 20,
+    alignItems: "center",
+    alignSelf: "center",
   },
   button: {
     flex: 0.1,
     alignSelf: "flex-end",
     alignItems: "center",
+    marginLeft: 75,
+    marginBottom: 50,
   },
   text: {
     fontSize: 18,
     color: "white",
+    textAlign: "center",
   },
 });

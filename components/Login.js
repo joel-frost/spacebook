@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Button } from "react-native";
+import { Button, StyleSheet, View} from "react-native";
 import { ScrollView, TextInput } from "react-native-gesture-handler";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Text } from "react-native-elements";
 
 class LoginScreen extends Component {
   constructor(props) {
@@ -15,8 +16,6 @@ class LoginScreen extends Component {
   }
 
   login = async () => {
-    // Validation here...
-
     fetch("http://localhost:3333/api/1.0.0/login", {
       method: "post",
       headers: {
@@ -29,7 +28,8 @@ class LoginScreen extends Component {
           return response.json();
         }
         if (response.status === 400) {
-          throw "Invalid email or password";
+          this.props.navigation.navigate("Message", {message: "Incorrect Email/Password, please try again."});          
+          return;
         } else {
           throw "Something went wrong";
         }
@@ -48,7 +48,9 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <ScrollView>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.welcomeText}>Welcome to SpaceBook</Text>
+        <View>
         <TextInput
           placeholder="Enter your email..."
           onChangeText={(email) => this.setState({ email })}
@@ -62,15 +64,37 @@ class LoginScreen extends Component {
           secureTextEntry
           style={{ padding: 5, borderWidth: 1, margin: 5 }}
         />
-        <Button title="Login" onPress={() => this.login()} />
-        <Button
-          title="Don't have an account?"
-          color="darkblue"
+        </View>
+        <Button style={styles.buttons} title="Login" onPress={() => this.login()}
+        color="tomato" />
+        <Button style={styles.buttons}
+          title="Sign Up"
+          color="salmon"
           onPress={() => this.props.navigation.navigate("Signup")}
         />
       </ScrollView>
     );
   }
 }
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    gap: 10,
+    marginTop: 10,
+  },
+  buttons: {
+    margin: 30
+
+  },
+  welcomeText: {
+    flex: 0.3,
+    fontSize: 40,
+    textAlign: "center",
+    fontWeight: 'bold'
+  }
+});
 
 export default LoginScreen;

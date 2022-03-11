@@ -1,6 +1,13 @@
 import React, { Component } from "react";
-import { View, ActivityIndicator, ScrollView, FlatList } from "react-native";
-import { Button, Text, Card } from "react-native-elements";
+import {
+  View,
+  ActivityIndicator,
+  ScrollView,
+  FlatList,
+  Button,
+  StyleSheet,
+} from "react-native";
+import { Text, Card } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getFriendsList } from "../api/SpacebookService";
 
@@ -16,10 +23,10 @@ class FriendsListScreen extends Component {
     };
   }
 
-  componentDidMount = async() => {
+  componentDidMount = async () => {
     await this.retrieveFromAsync();
     this.getFriendsList();
-  }
+  };
 
   retrieveFromAsync = async () => {
     const token = await AsyncStorage.getItem("@session_token");
@@ -29,16 +36,18 @@ class FriendsListScreen extends Component {
       token: token,
       id: id,
     });
-  }
+  };
 
   getFriendsList = async () => {
-    getFriendsList(this.state.token, this.state.id).then(async (responseJson) => {
-      console.log(responseJson);
-      this.setState({
-        isLoading: false,
-        listData: responseJson,
-      });
-    });
+    getFriendsList(this.state.token, this.state.id).then(
+      async (responseJson) => {
+        console.log(responseJson);
+        this.setState({
+          isLoading: false,
+          listData: responseJson,
+        });
+      }
+    );
   };
 
   render() {
@@ -58,6 +67,7 @@ class FriendsListScreen extends Component {
             some!
           </Text>
           <Button
+            color="salmon"
             title="View Requests"
             onPress={() => this.props.navigation.navigate("Friend Requests")}
           />
@@ -66,20 +76,30 @@ class FriendsListScreen extends Component {
     }
     return (
       <ScrollView>
-        <Text>Friend List</Text>
-        <Button
-          title="View Requests"
-          onPress={() => this.props.navigation.navigate("Friend Requests")}
-        />
+        <View style={styles.container}>
+          <Button
+            color="salmon"
+            title="View Requests"
+            onPress={() => this.props.navigation.navigate("Friend Requests")}
+          />
+        </View>
         <FlatList
           data={this.state.listData}
           renderItem={({ item, index }) => (
             <View>
               <Card>
-                <Card.Title>{item.user_givenname} {item.user_familyname}</Card.Title>
+                <Card.Title>
+                  {item.user_givenname} {item.user_familyname}
+                </Card.Title>
 
                 <Card.Divider />
-                <Button title="View Profile" onPress={() => this.props.navigation.navigate("Profile", {item})}/>
+                <Button
+                  color="salmon"
+                  title="View Profile"
+                  onPress={() =>
+                    this.props.navigation.navigate("Profile", { item })
+                  }
+                />
               </Card>
             </View>
           )}
@@ -89,5 +109,14 @@ class FriendsListScreen extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginTop: 10,
+    marginBottom: 10,
+    flex: 1,
+    alignItems: "center",
+  },
+});
 
 export default FriendsListScreen;

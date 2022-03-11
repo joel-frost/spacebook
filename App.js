@@ -7,6 +7,8 @@ import HomeNavigator from "./navigation/HomeNavigator";
 import LoginScreen from "./components/Login";
 import SignupScreen from "./components/Signup";
 import LogoutScreen from "./components/Logout";
+import MessageHandlerScreen from "./components/MessageHandler";
+
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +29,10 @@ class App extends Component {
               name="Logout"
               component={LogoutScreen}
               options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Message"
+              component={MessageHandlerScreen}
             />
           </Stack.Navigator>
         </NavigationContainer>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
-import { Text, Button } from "react-native-elements";
+import { View, ActivityIndicator, StyleSheet, Button } from "react-native";
+import { Text } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getPost } from "../api/SpacebookService";
 
@@ -91,6 +91,7 @@ class PostScreen extends Component {
           </Text>
           <Text style={styles.maintext}>{this.state.post.timestamp}</Text>
           <Button
+          color="salmon"
             title="Edit Post"
             onPress={() => this.props.navigation.navigate("Edit Post", {postID: this.state.postID})}
           />

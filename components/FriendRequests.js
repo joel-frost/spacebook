@@ -1,8 +1,18 @@
 import React, { Component } from "react";
-import { View, ActivityIndicator, ScrollView, FlatList } from "react-native";
-import { Button, Text, Card } from "react-native-elements";
+import {
+  View,
+  ActivityIndicator,
+  ScrollView,
+  FlatList,
+  Button,
+} from "react-native";
+import { Text, Card } from "react-native-elements";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { getFriendRequests, acceptFriendRequest, rejectFriendRequest } from "../api/SpacebookService";
+import {
+  getFriendRequests,
+  acceptFriendRequest,
+  rejectFriendRequest,
+} from "../api/SpacebookService";
 
 class FriendRequestsScreen extends Component {
   constructor(props) {
@@ -42,11 +52,19 @@ class FriendRequestsScreen extends Component {
   };
 
   acceptFriendRequest = async (id) => {
-    acceptFriendRequest(this.state.token, id);
+    acceptFriendRequest(this.state.token, id).then(() => {
+      this.props.navigation.navigate("Message", {
+        message: "Friend request accepted.",
+      });
+    });
   };
 
   rejectFriendRequest = async (id) => {
-    rejectFriendRequest(this.state.token, id);
+    rejectFriendRequest(this.state.token, id).then(() => {
+      this.props.navigation.navigate("Message", {
+        message: "Friend request rejected.",
+      });
+    });
   };
 
   render() {
@@ -79,10 +97,12 @@ class FriendRequestsScreen extends Component {
                 <Card.Divider />
                 <Button
                   title="Accept"
+                  color="salmon"
                   onPress={() => this.acceptFriendRequest(item.user_id)}
                 />
                 <Button
                   title="Reject"
+                  color="salmon"
                   onPress={() => this.rejectFriendRequest(item.user_id)}
                 />
                 <Text>Accept / Reject Here</Text>
