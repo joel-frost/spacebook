@@ -286,7 +286,6 @@ export const editPost = async (token, id, postID, updatedInfo) => {
 };
 
 export const savePhoto = async (token, id, data) => {
-  // Get these from AsyncStorage
   const res = await fetch(data.base64);
   const blob = await res.blob();
 
