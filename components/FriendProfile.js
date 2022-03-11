@@ -26,6 +26,7 @@ class FriendProfileScreen extends Component {
       email: "",
       token: "",
       id: "",
+      photo: null
     };
   }
 
@@ -39,6 +40,7 @@ class FriendProfileScreen extends Component {
     
     await this.retrieveFromAsync();
     this.getUser();
+    this.getProfilePicture();
     this.getPosts();
   }
 
@@ -59,6 +61,28 @@ class FriendProfileScreen extends Component {
       });
     });
   };
+
+  getProfilePicture = async () => {
+    fetch(`http://localhost:3333/api/1.0.0/user/${this.state.id}/photo`, {
+      method: 'GET',
+      headers: {
+        'X-Authorization': this.state.token
+      }
+    })
+    .then((res) => {
+      return res.blob();
+    })
+    .then((resBlob) => {
+      let data = URL.createObjectURL(resBlob);
+      this.setState({
+        photo: data,
+        isLoading: false
+      });
+    })
+    .catch((err) => {
+      console.log("error", err)
+    });
+  }
 
   getPosts = async () => {
     getPosts(this.state.token, this.state.id).then(async (responseJson) => {
@@ -142,7 +166,7 @@ class FriendProfileScreen extends Component {
           <Avatar
             size={128}
             rounded
-            source={"https://randomuser.me/api/portraits/men/36.jpg"}
+            source={this.state.photo}
           />
           <Text style={styles.nametext}>
             {this.state.first_name} {this.state.last_name}

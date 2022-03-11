@@ -353,3 +353,40 @@ export const editPost = async (token, id, postID, updatedInfo) => {
   });
   
 }
+
+export const savePhoto = async (token, id, data) => {
+  // Get these from AsyncStorage
+  let res = await fetch(data.base64);
+  let blob = await res.blob();
+
+  return fetch(`http://localhost:3333/api/1.0.0/user/${id}/photo`, {
+      method: "POST",
+      headers: {
+          "Content-Type": "image/png",
+          "X-Authorization": token
+      },
+      body: blob
+  })
+  .then((response) => {
+      console.log("Picture added", response);
+  })
+  .catch((err) => {
+      console.log(err);
+  })
+}
+
+export const getProfilePicture = async (token, id) => {
+  fetch(`http://localhost:3333/api/1.0.0/user/${id}/photo`, {
+    method: 'GET',
+    headers: {
+      'X-Authorization': token
+    }
+  })
+  .then((res) => {
+    return res.blob();
+  })
+  .then((resBlob) => {
+    let data = URL.createObjectURL(resBlob);
+    return data;
+  });
+}

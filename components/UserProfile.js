@@ -1,13 +1,15 @@
 import React, { Component } from "react";
-import {
-  View,
-  ActivityIndicator,
-  ScrollView,
-  StyleSheet,
-} from "react-native";
+import { View, ActivityIndicator, ScrollView, StyleSheet, Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FlatList } from "react-native-gesture-handler";
-import { Text, Card, Input, Button, Avatar } from "react-native-elements";
+import {
+  Text,
+  Card,
+  Input,
+  Button,
+  Avatar,
+  ThemeConsumer,
+} from "react-native-elements";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {
   getUser,
@@ -15,6 +17,7 @@ import {
   submitPost,
   deletePost,
   likePost,
+  getProfilePicture,
 } from "../api/SpacebookService";
 
 //TODO: Edit Post, Edit Profile, Add Photo
@@ -31,6 +34,7 @@ class UserProfileScreen extends Component {
       email: "",
       token: "",
       id: "",
+      photo: null,
     };
   }
 
@@ -86,6 +90,28 @@ class UserProfileScreen extends Component {
     });
   };
 
+  getProfilePicture = async () => {
+    fetch(`http://localhost:3333/api/1.0.0/user/${this.state.id}/photo`, {
+      method: 'GET',
+      headers: {
+        'X-Authorization': this.state.token
+      }
+    })
+    .then((res) => {
+      return res.blob();
+    })
+    .then((resBlob) => {
+      let data = URL.createObjectURL(resBlob);
+      this.setState({
+        photo: data,
+        isLoading: false
+      });
+    })
+    .catch((err) => {
+      console.log("error", err)
+    });
+  }
+
   submitPost = async () => {
     submitPost(this.state.token, this.state.id, this.state.text)
       .then((response) => {
@@ -127,6 +153,7 @@ class UserProfileScreen extends Component {
   getData = async () => {
     await this.retrieveFromAsync();
     this.getUser();
+    this.getProfilePicture();
     this.getPosts();
   };
 
@@ -150,7 +177,7 @@ class UserProfileScreen extends Component {
           <Avatar
             size={128}
             rounded
-            source={"https://randomuser.me/api/portraits/men/36.jpg"}
+            source={this.state.photo}
           />
           <Text style={styles.nametext}>
             {this.state.first_name} {this.state.last_name}
@@ -197,7 +224,12 @@ class UserProfileScreen extends Component {
                   <Text>
                     Likes: {item.numLikes.toString()} Time: {item.timestamp}
                   </Text>
-                  <Button title="View Post" onPress={() => this.props.navigation.navigate("Post", {item})} />
+                  <Button
+                    title="View Post"
+                    onPress={() =>
+                      this.props.navigation.navigate("Post", { item })
+                    }
+                  />
                 </Card>
               </View>
             )}

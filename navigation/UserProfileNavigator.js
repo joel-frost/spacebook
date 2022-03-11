@@ -4,6 +4,7 @@ import UserProfileScreen from "../components/userProfile";
 import EditProfileScreen from "../components/EditProfile";
 import PostScreen from "../components/Post";
 import EditPostScreen from "../components/EditPost";
+import TakePhotoScreen from "../components/TakePhoto";
 
 const ProfileStack = createNativeStackNavigator();
 
@@ -24,6 +25,10 @@ class UserProfileNavigator extends Component {
         <ProfileStack.Screen
           name="Edit Post"
           component={EditPostScreen}
+        />
+        <ProfileStack.Screen
+          name="Take Photo"
+          component={TakePhotoScreen}
         />
       </ProfileStack.Navigator>
     );
