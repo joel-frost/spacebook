@@ -308,3 +308,48 @@ export const unlikePost = async (token, id, postID) => {
     return response;
   });
 };
+
+export const getPost = async (token, id, postID) => {
+  return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post/${postID}`, {
+    method: "get",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Authorization": token,
+    },
+  }).then((response) => {
+    if (response.status === 200) {
+      return response.json();
+    }
+    if (response.status === 400) {
+      throw "Unable to get posts";
+    }
+    if (response.status === 403) {
+      return;
+    } else {
+      throw "Something went wrong";
+    }
+  });
+};
+
+export const editPost = async (token, id, postID, updatedInfo) => {
+  console.log(JSON.stringify(updatedInfo));
+  return fetch(`http://localhost:3333/api/1.0.0/user/${id}/post/${postID}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      "X-Authorization": token,
+    },
+    body: JSON.stringify(updatedInfo)
+    
+  }).then((response) => {
+    if (response.status === 200) {
+      return response;
+    }
+    if (response.status === 400) {
+      throw "Unable to update";
+    } else {
+      throw "Something went wrong";
+    }
+  });
+  
+}

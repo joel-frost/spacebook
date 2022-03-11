@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { View, ActivityIndicator, ScrollView, StyleSheet, RefreshControl } from "react-native";
+import {
+  View,
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FlatList } from "react-native-gesture-handler";
 import { Text, Card, Input, Button, Avatar } from "react-native-elements";
@@ -9,7 +14,7 @@ import {
   getPosts,
   submitPost,
   deletePost,
-  likePost
+  likePost,
 } from "../api/SpacebookService";
 
 //TODO: Edit Post, Edit Profile, Add Photo
@@ -30,7 +35,7 @@ class UserProfileScreen extends Component {
   }
 
   componentDidMount = async () => {
-    this._unsubscribe = this.props.navigation.addListener('focus', () => {
+    this._unsubscribe = this.props.navigation.addListener("focus", () => {
       this.getData();
     });
   };
@@ -60,12 +65,23 @@ class UserProfileScreen extends Component {
     });
   };
 
+  formatDates(responseJson) {
+    console.log(this.state.listData);
+    for (let i = 0; i < responseJson.length; i++) {
+      responseJson[i].timestamp = new Date(
+        responseJson[i].timestamp
+      ).toLocaleString();
+    }
+    return responseJson;
+  }
+
   getPosts = async () => {
     getPosts(this.state.token, this.state.id).then(async (responseJson) => {
       console.log(responseJson);
+      let formattedData = this.formatDates(responseJson);
       this.setState({
         isLoading: false,
-        listData: responseJson,
+        listData: formattedData,
       });
     });
   };
@@ -112,14 +128,13 @@ class UserProfileScreen extends Component {
     await this.retrieveFromAsync();
     this.getUser();
     this.getPosts();
-  }
+  };
 
   likePost = async (postID) => {
     likePost(this.state.token, this.state.id, postID).then(() => {
       this.getData();
     });
-  }
-
+  };
 
   render() {
     if (this.state.isLoading) {
@@ -136,7 +151,7 @@ class UserProfileScreen extends Component {
             size={128}
             rounded
             source={"https://randomuser.me/api/portraits/men/36.jpg"}
-          />        
+          />
           <Text style={styles.nametext}>
             {this.state.first_name} {this.state.last_name}
           </Text>
@@ -182,6 +197,7 @@ class UserProfileScreen extends Component {
                   <Text>
                     Likes: {item.numLikes.toString()} Time: {item.timestamp}
                   </Text>
+                  <Button title="View Post" onPress={() => this.props.navigation.navigate("Post", {item})} />
                 </Card>
               </View>
             )}
