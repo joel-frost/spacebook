@@ -9,8 +9,8 @@ class LoginScreen extends Component {
     super(props);
 
     this.state = {
-      email: 'email@email.com',
-      password: 'password',
+      email: '',
+      password: '',
     };
   }
 
