@@ -9,7 +9,11 @@ class SearchNavigator extends Component {
   render() {
     return (
       <SearchStack.Navigator>
-        <SearchStack.Screen name="Search Users" component={SearchScreen} />
+        <SearchStack.Screen
+          name="Search Users"
+          component={SearchScreen}
+          options={{ headerShown: false }}
+        />
         <SearchStack.Screen name="Profile" component={FriendProfileScreen} />
       </SearchStack.Navigator>
     );
