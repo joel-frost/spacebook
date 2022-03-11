@@ -233,7 +233,7 @@ export const likePost = async (token, id, postID) => {
         return response;
       })
       .catch((e) => {
-
+        throw new Error(e);
       });
 };
 

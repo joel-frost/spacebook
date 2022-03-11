@@ -90,11 +90,21 @@ class FriendProfileScreen extends Component {
         });
   };
 
+  formatDates(responseJson) {
+    for (let i = 0; i < responseJson.length; i++) {
+      responseJson[i].timestamp = new Date(
+          responseJson[i].timestamp
+      ).toLocaleString();
+    }
+    return responseJson;
+  }
+
   getPosts = async () => {
     getPosts(this.state.token, this.state.id).then(async (responseJson) => {
+      const formattedData = this.formatDates(responseJson);
       this.setState({
         isLoading: false,
-        listData: responseJson,
+        listData: formattedData,
       });
     });
   };
@@ -145,6 +155,8 @@ class FriendProfileScreen extends Component {
     });
   };
 
+  // Attempts to add like to a post, if it fails try
+  // to remove the like before giving the user an error.
   likePost = async (postID) => {
     likePost(this.state.token, this.state.id, postID).then((response) => {
       if (response.status === 200) {
@@ -212,8 +224,12 @@ class FriendProfileScreen extends Component {
                   <Button
                     title="View Post"
                     color="salmon"
-                    onPress={() =>
-                      this.props.navigation.navigate('Post', {item})
+                    onPress={() => {
+                      this.props.navigation.navigate('Post',
+                          {post_id: item.post_id,
+                            user_id: item.author.user_id,
+                            profile_id: this.state.id});
+                    }
                     }
                   />
                 </Card>

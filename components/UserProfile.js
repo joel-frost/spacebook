@@ -19,6 +19,7 @@ import {
   unlikePost,
 } from '../api/SpacebookService';
 
+// Screen to display the current logged in users profile, allowing editing.
 class UserProfileScreen extends Component {
   constructor(props) {
     super(props);
@@ -158,6 +159,8 @@ class UserProfileScreen extends Component {
     });
   };
 
+  // Attempts to add like to a post, if it fails try
+  // to remove the like before giving the user an error.
   likePost = async (postID) => {
     likePost(this.state.token, this.state.id, postID).then((response) => {
       if (response.status === 200) {
@@ -230,8 +233,12 @@ class UserProfileScreen extends Component {
                   <Button
                     title="View Post"
                     color="salmon"
-                    onPress={() =>
-                      this.props.navigation.navigate('Post', {item})
+                    onPress={() => {
+                      this.props.navigation.navigate('Post',
+                          {post_id: item.post_id,
+                            user_id: item.author.user_id,
+                            profile_id: this.state.id});
+                    }
                     }
                   />
                 </Card>

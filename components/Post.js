@@ -16,18 +16,22 @@ class PostScreen extends Component {
       sessionID: '',
       post: {},
       isAuthor: false,
+      profileID: '',
     };
   }
 
   componentDidMount = async () => {
     try {
       this.setState({
-        postID: this.props.route.params.item.post_id,
-        userID: this.props.route.params.item.author.user_id,
+        postID: this.props.route.params.post_id,
+        userID: this.props.route.params.user_id,
+        profileID: this.props.route.params.profile_id,
       });
     } catch (e) {
       throw new Error('Unable to access post');
     }
+
+    console.log(this.state.profileID);
 
     await this.retrieveFromAsync();
     this.checkAuthor();
@@ -56,7 +60,7 @@ class PostScreen extends Component {
   }
 
   getPost() {
-    getPost(this.state.token, this.state.userID, this.state.postID).then(
+    getPost(this.state.token, this.state.profileID, this.state.postID).then(
         (response) => {
           const formattedResponse = this.formatDate(response);
           this.setState({

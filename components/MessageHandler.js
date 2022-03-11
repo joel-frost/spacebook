@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Text} from 'react-native-elements';
 import {ActivityIndicator, View, StyleSheet} from 'react-native';
 
+// Component to display messages to the user for errors and validation.
 class MessageHandlerScreen extends Component {
   constructor(props) {
     super(props);
